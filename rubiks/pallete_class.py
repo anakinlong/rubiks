@@ -68,6 +68,15 @@ class Pallete(dict):
         # Also update things that need updating:
         self.__update()
 
+    @classmethod
+    def create_combined_pallete(cls, colour_dict: dict[str, Colour]):
+        """
+        Create a "combined" pallete, where combinations of colours from the colour dict are also included.
+        :param colour_dict: a dictionary mapping string colour names to colours.
+        :return: a pallete with combinations of colours.
+        """
+        raise NotImplementedError("combined palletes not yet implemented")
+
     @staticmethod
     def __validate_key_value_pair(key: Any, value: Any) -> None:
         """
