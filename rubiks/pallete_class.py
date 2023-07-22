@@ -8,12 +8,12 @@ from typing import Any
 
 # The rubiks cube colours as a dictionary:
 RUBIKS_COLOUR_DICT = {
-    "g": Colour([ 72, 155,   0]),
+    "g": Colour([72, 155, 0]),
     "w": Colour([255, 255, 255]),
-    "r": Colour([ 52,  18, 183]),
-    "y": Colour([  0, 213, 255]),
-    "b": Colour([173,  70,   0]),
-    "o": Colour([  0,  88, 255])
+    "r": Colour([52, 18, 183]),
+    "y": Colour([0, 213, 255]),
+    "b": Colour([173, 70, 0]),
+    "o": Colour([0, 88, 255]),
 }
 
 

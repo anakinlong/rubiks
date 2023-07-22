@@ -30,4 +30,3 @@ rubiks.check_type(a, [str, list], "a")
 # cv2.waitKey(0)
 
 # cv2.imwrite("Rubiks Images\mona lisa rbks.png", rubiks_image)
-

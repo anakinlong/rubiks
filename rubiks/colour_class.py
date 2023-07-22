@@ -15,7 +15,9 @@ class Colour(list):
     A colour :^). This is basically a list with a few extra features. Currently only supports 3 colour channels.
     """
 
-    def __init__(self, iterable: Iterable[int] | None = None, channel_format: list[str] = None) -> None:
+    def __init__(
+        self, iterable: Iterable[int] | None = None, channel_format: list[str] = None
+    ) -> None:
         """
         A colour :^). This is basically a list with a few extra features. Currently only supports 3 colour channels.
 
@@ -73,7 +75,7 @@ class Colour(list):
             raise ValueError(f"{channel} is not a valid channel.\n{self.format}")
 
         return self[self.format.index(channel)]
-    
+
     def reformat(self, new_format: list[str]) -> None:
         """
         Change the order of the channel values to match a new format.
@@ -117,7 +119,9 @@ class Colour(list):
             raise TypeError(f"{type(iterable)} object is not iterable.\n{iterable}")
         # Check the length is correct:
         if len(iterable) != 3:
-            raise ValueError(f"Iterable must have exactly 3 elements. Found {len(iterable)}.\n{iterable}")
+            raise ValueError(
+                f"Iterable must have exactly 3 elements. Found {len(iterable)}.\n{iterable}"
+            )
         # Check the types of the elements are correct:
         for element in iterable:
             check_type(element, int, "an element of the colour iterable")
@@ -136,4 +140,6 @@ class Colour(list):
             check_type(channel, int, "an element of the channel format list")
         # Check there are no duplicates:
         if len(channel_format) != len(set(channel_format)):
-            raise ValueError(f"Duplicate channel name in the channel format:\n{channel_format}")
+            raise ValueError(
+                f"Duplicate channel name in the channel format:\n{channel_format}"
+            )

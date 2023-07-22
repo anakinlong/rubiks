@@ -16,7 +16,7 @@ def is_permutation(list_1: List[Any], list_2: List[Any]) -> bool:
     """
 
     # We do this by sorting both of them and seeing if they produce the same sorted list:
-    answer = (sorted(list_1) == sorted(list_2))
+    answer = sorted(list_1) == sorted(list_2)
     return answer
 
 

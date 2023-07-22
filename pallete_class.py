@@ -5,22 +5,22 @@ The pallete class.
 import colour_class as c
 import colour_transformations as ct
 import random_functions as rf
+
 # import constants (circular import problems)
 from typing import Dict, Tuple, Union, List
 
 
 RUBIKS_PALLETE = {
-    "g": c.Colour([ 72, 155,   0]),
+    "g": c.Colour([72, 155, 0]),
     "w": c.Colour([255, 255, 255]),
-    "r": c.Colour([ 52,  18, 183]),
-    "y": c.Colour([  0, 213, 255]),
-    "b": c.Colour([173,  70,   0]),
-    "o": c.Colour([  0,  88, 255])
+    "r": c.Colour([52, 18, 183]),
+    "y": c.Colour([0, 213, 255]),
+    "b": c.Colour([173, 70, 0]),
+    "o": c.Colour([0, 88, 255]),
 }
 
 
 class Pallete(dict):
-
     def __init__(self, colour_dict: Dict[str, c.Colour]):
         """
         A colour pallete :^). Basically a dictionary.
@@ -45,7 +45,6 @@ class Pallete(dict):
         # Also update things that need updating:
         self.update()
 
-
     def update(self):
         """
         Updates various properties.
@@ -56,7 +55,6 @@ class Pallete(dict):
         self.colours: List[c.Colour] = list(self.values())
         # Combined as a dictionary:
         self.colour_dict = dict(zip(self.colour_names, self.colours))
-
 
     def __setitem__(self, key: str, value: c.Colour) -> None:
 
@@ -70,7 +68,6 @@ class Pallete(dict):
         # Also update things that need updating:
         self.update()
 
-
     def get_combined_colour_dict(self, *args, **kwargs):
         """
         Not implemented. Will raise an error.
@@ -79,13 +76,11 @@ class Pallete(dict):
 
 
 class CombinedPallete(Pallete):
-
     def __init__(self, pallete: Pallete):
 
         combined_colour_dict = self.get_combined_colour_dict(pallete)
 
         super().__init__(combined_colour_dict)
-
 
     def get_combined_colour_dict(self, pallete: Pallete):
         """

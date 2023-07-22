@@ -7,9 +7,11 @@ import random_functions as rf
 from typing import Tuple
 
 
-def colour_average(colour_1: c.Colour, colour_2: c.Colour, weights: Tuple[float] = (1, 1)) -> c.Colour:
+def colour_average(
+    colour_1: c.Colour, colour_2: c.Colour, weights: Tuple[float] = (1, 1)
+) -> c.Colour:
     """
-    Take two colours and return a new colour which has the colour channel format of the first, and whose colour channel 
+    Take two colours and return a new colour which has the colour channel format of the first, and whose colour channel
     values are the averages of the two.
 
     :param colour_1: a colour.
@@ -35,7 +37,9 @@ def colour_average(colour_1: c.Colour, colour_2: c.Colour, weights: Tuple[float]
     new_values = colour_1.values
     new_format = colour_1.format
     for i, channel in enumerate(new_format):
-        new_value = w_1 * colour_1.channel_value(channel) + w_2 * colour_2.channel_value(channel)
+        new_value = w_1 * colour_1.channel_value(
+            channel
+        ) + w_2 * colour_2.channel_value(channel)
         new_values[i] = round(new_value)
 
     # Make it a colour:

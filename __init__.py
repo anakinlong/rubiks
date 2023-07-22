@@ -1,4 +1,3 @@
-
 from . import colour_class
 from . import pallete_class
 from . import random_functions

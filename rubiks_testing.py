@@ -10,25 +10,20 @@ import cv2
 
 # The [B,G,R] of each rubiks cube colour:
 RUBIKS_COLOURS = {
-    "g": [ 72, 155,   0],
+    "g": [72, 155, 0],
     "w": [255, 255, 255],
-    "r": [ 52,  18, 183],
-    "y": [  0, 213, 255],
-    "b": [173,  70,   0],
-    "o": [  0,  88, 255]
+    "r": [52, 18, 183],
+    "y": [0, 213, 255],
+    "b": [173, 70, 0],
+    "o": [0, 88, 255],
 }
 
-RUBIKS_COLOUR_WEIGHTS = {
-    "g": 1.0,
-    "w": 1.0,
-    "r": 1.0,
-    "y": 1.0,
-    "b": 0.8,
-    "o": 1.0
-}
+RUBIKS_COLOUR_WEIGHTS = {"g": 1.0, "w": 1.0, "r": 1.0, "y": 1.0, "b": 0.8, "o": 1.0}
 
 
-def scale_image(image: cv2.Mat, f: int, interpolation: Union[str, None] = None) -> cv2.Mat:
+def scale_image(
+    image: cv2.Mat, f: int, interpolation: Union[str, None] = None
+) -> cv2.Mat:
     """
     Scale an image, maintaining the aspect ratio.
 
@@ -41,9 +36,7 @@ def scale_image(image: cv2.Mat, f: int, interpolation: Union[str, None] = None) 
 
     # Check that f is an integer:
     if type(f) is not int:
-        raise TypeError(
-            f"{type(f)} is not an accepted type for f, please use an int."
-        )
+        raise TypeError(f"{type(f)} is not an accepted type for f, please use an int.")
 
     # Get the dimensions of the image:
     height, width = image.shape[:2]
@@ -60,11 +53,7 @@ def scale_image(image: cv2.Mat, f: int, interpolation: Union[str, None] = None) 
 
 
 def rubiks_dimension_estimator(
-    width: int,
-    height: int,
-    n_cubes: int,
-    d: int = 3,
-    reporting: bool = False
+    width: int, height: int, n_cubes: int, d: int = 3, reporting: bool = False
 ) -> tuple(int):
     """
     Output the rubiks cube dimensions of an image.
@@ -98,22 +87,21 @@ def rubiks_dimension_estimator(
         print(f"Rubiks aspect ratio: {aspect_r}")
         print(f"Max cubes: {n_cubes}")
         print(f"Used cubes: {n_cubes_r}")
-        print(f"Quantitative metric: {arrangement_metric(aspect, aspect_r, n_cubes, n_cubes_r)}")
-    
+        print(
+            f"Quantitative metric: {arrangement_metric(aspect, aspect_r, n_cubes, n_cubes_r)}"
+        )
+
     return image_dimensions_r
 
 
 def arrangement_metric(
-    aspect_i: float,
-    aspect_r: float,
-    n_cubes_i: int,
-    n_cubes_r: int
+    aspect_i: float, aspect_r: float, n_cubes_i: int, n_cubes_r: int
 ) -> float:
     """
-    Given an initial image with aspect ratio aspect_i, and a number of cubes n_cubes_i, a quantitative metric 
-    to find out how good a rubiks image with aspect ratio aspect_r and number of cubes n_cubes_r is. This metric 
+    Given an initial image with aspect ratio aspect_i, and a number of cubes n_cubes_i, a quantitative metric
+    to find out how good a rubiks image with aspect ratio aspect_r and number of cubes n_cubes_r is. This metric
     is entirely made up and probably terrible.
-    
+
     In theory, a lower score indicates a better arrangement of cubes, with a score of 0 being perfect.
 
     :param aspect_i: aspect ratio of initial image (width / height).
@@ -142,15 +130,17 @@ def arrangement_metric(
     return score
 
 
-def average_pixel_colour(image: cv2.Mat, position_0: Tuple[float], position_1: Tuple[float]) -> np.ndarray[float]:
+def average_pixel_colour(
+    image: cv2.Mat, position_0: Tuple[float], position_1: Tuple[float]
+) -> np.ndarray[float]:
     """
-    Take a rectangular section of an image, and calculate the average pixel colour. The vertices of the rectangular 
-    aren't necessarily on the vertices of pixels, so we need to weight the average by the area of each pixel that 
+    Take a rectangular section of an image, and calculate the average pixel colour. The vertices of the rectangular
+    aren't necessarily on the vertices of pixels, so we need to weight the average by the area of each pixel that
     is in the section in which we are interested. For a lot of this function it's easier to look at the diagram.
 
     :param image: an image.
     :param position_0: the coordinates of the top left corner of the rectangular section, in the format (x_0, y_0).
-    :param position_1: the coordinates of the bottom right corner of the rectangular section, in the format 
+    :param position_1: the coordinates of the bottom right corner of the rectangular section, in the format
     (x_1, y_1).
 
     :return colour: the average pixel colour of the rectangular section of the image.
@@ -206,16 +196,18 @@ def average_pixel_colour(image: cv2.Mat, position_0: Tuple[float], position_1: T
     # Create the separate horizontal and vertical coordinates of the vertices:
     green_width_values = create_green_values(w_0, w_1)
     green_height_values = create_green_values(h_0, h_1)
-    
+
     # A 2D list for area values:
     area = np.ones((len(green_height_values) - 1, len(green_width_values) - 1))
     # The rectangular section of the image:
-    small_image = image[math.floor(h_0):math.ceil(h_1), math.floor(w_0):math.ceil(w_1), :]
+    small_image = image[
+        math.floor(h_0) : math.ceil(h_1), math.floor(w_0) : math.ceil(w_1), :
+    ]
     # Loop through each pixel and calculate how much of its area is in the rectangular section.
     # We already know that only the pixels around the edge of the rectangle are going to have an area not equal
     # to 1, so we start off with an array of ones and only modify the values around the edges:
     width_indices = len(green_width_values) - 1
-    height_indices =  len(green_height_values) - 1
+    height_indices = len(green_height_values) - 1
     for i in range(width_indices):
         for j in range(height_indices):
             # We are on an edge if either index is 0 or their maximum:
@@ -232,8 +224,8 @@ def average_pixel_colour(image: cv2.Mat, position_0: Tuple[float], position_1: T
     # We need to do this for each of the (B, G, R) values:
     colour = np.zeros(3)
     for i in range(3):
-        colour[i] = np.average(small_image[:,:,i], weights=area)
-    
+        colour[i] = np.average(small_image[:, :, i], weights=area)
+
     return colour
 
 
@@ -254,19 +246,24 @@ def resize_image(image: cv2.Mat, dimensions: Tuple[int]) -> cv2.Mat:
 
     # Create an image with our desired dimensions:
     new_img = np.zeros((height_r, width_r, 3), np.uint8)
-    
+
     # Take the coordinates of each pixel in the new image and scale up to original image size:
     coords = np.zeros((height_r + 1, width_r + 1), dtype=object)
     for x in range(width_r + 1):
         for y in range(height_r + 1):
             # Make sure that they don't accidentally go off the end of the image due to numerical issues:
-            coords[y, x] = (min(x * width / width_r, width), min(y * height / height_r, height))
+            coords[y, x] = (
+                min(x * width / width_r, width),
+                min(y * height / height_r, height),
+            )
 
     # Loop through these new big pixels and get the average colour of that area in the original image:
     for x in range(width_r):
         for y in range(height_r):
-            new_img[y, x] = average_pixel_colour(image, coords[y, x], coords[y + 1, x + 1])
-    
+            new_img[y, x] = average_pixel_colour(
+                image, coords[y, x], coords[y + 1, x + 1]
+            )
+
     return new_img
 
 
@@ -321,7 +318,7 @@ def recolour_nearest_colour(image: cv2.Mat, pallete: List[List[int]]) -> cv2.Mat
 
     :return new_img: the recoloured image.
     """
-    
+
     # Loop through each pixel and apply the method:
     height, width = image.shape[:2]
     new_img = image.copy()
@@ -338,7 +335,7 @@ def recolour_nearest_colour(image: cv2.Mat, pallete: List[List[int]]) -> cv2.Mat
 def find_nearest_colour_weighted(
     colour: List[int],
     pallete: List[List[int]],
-    weights: List[float] = [1, 1, 1, 1, 1, 1]
+    weights: List[float] = [1, 1, 1, 1, 1, 1],
 ) -> List[int]:
     """
     Take a colour, and find the colour in the pallete that it is geometrically closest to.
@@ -384,7 +381,7 @@ def find_nearest_colour_weighted(
 def recolour_nearest_colour_weighted(
     image: cv2.Mat,
     pallete: List[List[int]],
-    weights: List[float] = list(RUBIKS_COLOUR_WEIGHTS.values())
+    weights: List[float] = list(RUBIKS_COLOUR_WEIGHTS.values()),
 ) -> cv2.Mat:
     """
     Recolour an image by replacing each pixel with the colour from the pallete that is geometrically closest
@@ -404,7 +401,7 @@ def recolour_nearest_colour_weighted(
             f"There are {p} colours in the pallete, but {w} weights. Must have the same number of pallete colours"
             f" as weights."
         )
-    
+
     # Loop through each pixel and apply the method:
     height, width = image.shape[:2]
     new_img = image.copy()
@@ -413,7 +410,9 @@ def recolour_nearest_colour_weighted(
             # Find the current colour:
             original_colour = image[y, x]
             # Set it to the closest one from the pallete:
-            new_img[y, x] = find_nearest_colour_weighted(original_colour, pallete, weights)
+            new_img[y, x] = find_nearest_colour_weighted(
+                original_colour, pallete, weights
+            )
 
     return new_img
 
@@ -421,15 +420,15 @@ def recolour_nearest_colour_weighted(
 def plane_colour(
     colour: List[int],
     plane: Tuple[float] = (1, 1, 1, 255),
-    origin: Tuple[float] = (0, 0, 0)
+    origin: Tuple[float] = (0, 0, 0),
 ) -> List[int]:
     """
     Take a colour and project it from the origin to a plane in 3d colour space.
 
     :param colour: the colour.
-    :param plane: the coefficients of the plane, in the format (b, g, r, c) => bB + gG + rR = c for colours B, G, R. 
+    :param plane: the coefficients of the plane, in the format (b, g, r, c) => bB + gG + rR = c for colours B, G, R.
     Defaults to B + G + R = 255.
-    :param origin: the point in 3d colour space from which we will project the colour, in the format (b, g, r). 
+    :param origin: the point in 3d colour space from which we will project the colour, in the format (b, g, r).
     Defaults to (0, 0, 0).
 
     :return new_colour: the projected colour.
@@ -442,9 +441,7 @@ def plane_colour(
 
     # Check that the plane is valid:
     if all(x == 0 for x in [a, b, c]):
-        raise ValueError(
-            f"{plane} is not a valid plane."
-        )
+        raise ValueError(f"{plane} is not a valid plane.")
 
     # Check that the colour isn't at the origin:
     if all(c == o for c, o in zip(colour, origin)):
@@ -457,7 +454,9 @@ def plane_colour(
             return [127, 127, 127]
 
     # Work out the t value:
-    t = (d - np.sum(np.multiply([a, b, c], origin))) / np.sum(np.subtract(colour, origin))
+    t = (d - np.sum(np.multiply([a, b, c], origin))) / np.sum(
+        np.subtract(colour, origin)
+    )
 
     # Project the colour using the t value:
     new_colour = np.add(origin, np.multiply(t, np.multiply([a, b, c], colour)))
@@ -473,7 +472,7 @@ def recolour_nearest_colour_planed(
     image: cv2.Mat,
     pallete: List[List[int]],
     plane: Tuple[float] = (1, 1, 1, 255),
-    origin: Tuple[float] = (0, 0, 0)
+    origin: Tuple[float] = (0, 0, 0),
 ) -> cv2.Mat:
     """
     Recolour an image by replacing each pixel with the colour from the pallete that is geometrically closest
@@ -481,9 +480,9 @@ def recolour_nearest_colour_planed(
 
     :param image: an image.
     :param pallete: a list of colours to use in the recoloured image.
-    :param plane: the coefficients of the plane, in the format (b, g, r, c) => bB + gG + rR = c for colours B, G, R. 
+    :param plane: the coefficients of the plane, in the format (b, g, r, c) => bB + gG + rR = c for colours B, G, R.
     Defaults to B + G + R = 255.
-    :param origin: the point in 3d colour space from which we will project the colour, in the format (b, g, r). 
+    :param origin: the point in 3d colour space from which we will project the colour, in the format (b, g, r).
     Defaults to (0, 0, 0).
 
     :return new_img: the recoloured image.
@@ -491,7 +490,7 @@ def recolour_nearest_colour_planed(
 
     # Project the pallete to the plane:
     pallete_planed = [plane_colour(c, plane, origin) for c in pallete]
-    
+
     # Loop through each pixel and apply the method:
     height, width = image.shape[:2]
     new_img = image.copy()
@@ -510,11 +509,7 @@ def recolour_nearest_colour_planed(
     return new_img
 
 
-def recolour_image(
-    image: cv2.Mat,
-    method: str,
-    pallete: List[List[int]]
-) -> cv2.Mat:
+def recolour_image(image: cv2.Mat, method: str, pallete: List[List[int]]) -> cv2.Mat:
     """
     Take an image, and recolour it according to a pallete of colours and a method.
 
@@ -530,7 +525,7 @@ def recolour_image(
     methods = {
         "nearest colour": recolour_nearest_colour,
         "nearest colour weighted": recolour_nearest_colour_weighted,
-        "nearest colour planed": recolour_nearest_colour_planed
+        "nearest colour planed": recolour_nearest_colour_planed,
     }
 
     # Check that the method is a valid one:
@@ -609,12 +604,10 @@ def colour_range(image: cv2.Mat, channel: Union[int, str]) -> Tuple[int]:
     if channel in channel_names:
         channel = channel_names.index(channel)
     if type(channel) is not int:
-        raise TypeError(
-            f"cba to write this error rn"
-        )
+        raise TypeError(f"cba to write this error rn")
 
     # Find min and max:
-    channel_values = image[:,:,channel]
+    channel_values = image[:, :, channel]
     channel_min = np.amin(channel_values)
     channel_max = np.amax(channel_values)
 
@@ -640,7 +633,7 @@ def plot_colour_box(image: cv2.Mat) -> None:
     ranges = {}
     for channel in ["b", "g", "r"]:
         ranges[channel] = colour_range(image, channel)
-    
+
     # The vertices of the cuboid will be all the combinations of the ranges:
     bs, gs, rs = np.zeros(8), np.zeros(8), np.zeros(8)
     colours = np.zeros((8, 3))
@@ -674,11 +667,11 @@ def main(
     pallete: List[List[int]],
     recolouring_method: str,
     image_scale: float = 1,
-    image_folder: str = ".\\Images\\"
+    image_folder: str = ".\\Images\\",
 ) -> None:
     """
     Take an image and recreate it in rubiks cube form.
-    
+
     :param image_file_name: str,
     :param n_cubes: int,
     :param pallete: List[List[int]],
@@ -695,7 +688,9 @@ def main(
 
     # Get its dimensions, then estimate the best dimensions for the final image:
     height, width = im.shape[:2]
-    (new_height, new_width) = rubiks_dimension_estimator(width, height, n_cubes, reporting=True)
+    (new_height, new_width) = rubiks_dimension_estimator(
+        width, height, n_cubes, reporting=True
+    )
 
     # Create a real-colour version of the final image:
     new_im = resize_image(im, (new_height, new_width))
@@ -704,7 +699,7 @@ def main(
     new_new_im = recolour_image(new_im, recolouring_method, pallete)
 
     # Scale the image up so we can see it, and show the two pixelated images side-by-side:
-    scale  = math.floor(image_scale * width / new_width)
+    scale = math.floor(image_scale * width / new_width)
     horizontal = np.hstack((scale_image(new_im, scale), scale_image(new_new_im, scale)))
     # vertical = np.vstack((scale_image(new_im, scale), scale_image(new_new_im, scale)))
     cv2.imshow("im", horizontal)
@@ -716,11 +711,11 @@ def main(
 if __name__ == "__main__":
 
     main(
-        image_file_name = "mona lisa.png",
-        n_cubes = 600,
-        pallete = list(RUBIKS_COLOURS.values()),
-        recolouring_method = "nearest colour weighted",
-        image_scale = 3
+        image_file_name="mona lisa.png",
+        n_cubes=600,
+        pallete=list(RUBIKS_COLOURS.values()),
+        recolouring_method="nearest colour weighted",
+        image_scale=3
         # recolouring_kwargs = {
         #     "weights": [1, 1, 1, 1, 1, 1]
         # }
