@@ -2,7 +2,8 @@
 Pallete class for rubiks images.
 """
 
-from colour_class import Colour
+from __future__ import annotations
+from .colour_class import Colour
 from lib import check_type
 from typing import Any
 
@@ -22,7 +23,7 @@ class Pallete(dict):
     A colour pallete :^). Basically a dictionary.
     """
 
-    def __init__(self, colour_dict: dict[str, Colour] | None) -> None:
+    def __init__(self, colour_dict: dict[str, Colour] | None = None) -> None:
         """
         A colour pallete :^). Basically a dictionary. Maps colour names to Colours.
 
@@ -69,13 +70,44 @@ class Pallete(dict):
         self.__update()
 
     @classmethod
-    def create_combined_pallete(cls, colour_dict: dict[str, Colour]):
+    def create_combined_pallete(cls, colour_dict: dict[str, Colour]) -> Pallete:
         """
         Create a "combined" pallete, where combinations of colours from the colour dict are also included.
         :param colour_dict: a dictionary mapping string colour names to colours.
         :return: a pallete with combinations of colours.
         """
-        raise NotImplementedError("combined palletes not yet implemented")
+        # Combine the colour dict:
+        combined_colour_dict = Pallete.__combine_colour_dict(colour_dict)
+
+        return cls(combined_colour_dict)
+
+    @staticmethod
+    def __combine_colour_dict(colour_dict: dict[str, Colour]) -> dict[str, Colour]:
+        """
+        Create a "combined" colour dict, where combinations of colours from the colour dict are also included.
+        :param colour_dict: a dictionary mapping string colour names to colours.
+        :return: a colour dictionary with combinations of the colours.
+        """
+        combined_colour_dict = {}
+        # Get the colour names:
+        names = colour_dict.keys()
+        l = len(names)
+
+        # Loop through the combinations without repeating:
+        for i in range(l):
+            for j in range(l - i):
+                # Get the two names:
+                name_1, name_2 = names[i], names[j]
+                # Combine the names:
+                new_name = name_1 + name_2
+                # Combine those two colours:
+                new_colour = Colour.colour_average(
+                    colour_dict[name_1], colour_dict[name_2]
+                )
+                # Put them in the combined colour dictionary:
+                combined_colour_dict[new_name] = new_colour
+
+        return combined_colour_dict
 
     @staticmethod
     def __validate_key_value_pair(key: Any, value: Any) -> None:
