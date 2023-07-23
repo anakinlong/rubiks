@@ -5,7 +5,7 @@ Rubiks image transformations
 import numpy as np
 import cv2
 from typing import Any, Callable
-from .pallete_class import Pallete, PalleteWeights
+from .palette_class import Palette, PaletteWeights
 
 
 class Transformation:
@@ -62,47 +62,48 @@ class Transformation:
 
 class RecolourClosest(Transformation):
     """
-    Recolour each pixel to the colour in the pallete that is closest geometrically.
+    Recolour each pixel to the colour in the palette that is closest geometrically.
     """
 
-    def __init__(self, pallete: Pallete, weights: PalleteWeights | None = None) -> None:
+    def __init__(self, palette: Palette, weights: PaletteWeights | None = None) -> None:
         super().__init__()
 
         # Input validation:
-        weights = self.__validate_weights(pallete, weights)
+        weights = self.__validate_weights(palette, weights)
 
-        # Store the pallete and colour weights:
-        self.pallete = pallete
+        # Store the palette and colour weights:
+        self.palette = palette
         self.weights = weights
 
     def transform_image(self, image: cv2.Mat) -> cv2.Mat:
-        return super().transform_image(image, self.pallete, self.weights)
+        return super().transform_image(image, self.palette, self.weights)
 
     def transform_pixel(self, pixel: np.ndarray) -> np.ndarray:
-        return super().transform_pixel(pixel, self.pallete, self.weights)
+
+        return super().transform_pixel(pixel, self.palette, self.weights)
 
     def __apply_to_all_pixels(
         self,
         image: cv2.Mat,
-        transformation: Callable[[np.ndarray, Pallete], np.ndarray],
-        pallete: Pallete,
+        transformation: Callable[[np.ndarray, Palette], np.ndarray],
+        palette: Palette,
         weights: dict[str, float],
     ) -> cv2.Mat:
-        return super().__apply_to_all_pixels(image, transformation, pallete, weights)
+        return super().__apply_to_all_pixels(image, transformation, palette, weights)
 
     @staticmethod
     def __validate_weights(
-        pallete: Pallete, weights: PalleteWeights | None
-    ) -> PalleteWeights:
+        palette: Palette, weights: PaletteWeights | None
+    ) -> PaletteWeights:
         """ """
         # If we haven't been given any weights, assign each colour a weight of 1:
         if weights is None:
-            weights = PalleteWeights({colour_name: 1 for colour_name in pallete.names})
+            weights = PaletteWeights({colour_name: 1 for colour_name in palette.names})
 
-        # Check that each colour in the pallete has a weight:
+        # Check that each colour in the palette has a weight:
         colours_with_no_weight = [
             colour_name
-            for colour_name in pallete.names
+            for colour_name in palette.names
             if colour_name not in weights.names
         ]
         if colours_with_no_weight:
@@ -110,15 +111,15 @@ class RecolourClosest(Transformation):
                 f"The following colours were not assigned weights:\n{colours_with_no_weight}"
             )
 
-        # Check that only colours from the pallete are in the weights:
+        # Check that only colours from the palette are in the weights:
         extra_colours = [
             colour_name
             for colour_name in weights.names
-            if colour_name not in pallete.names
+            if colour_name not in palette.names
         ]
         if extra_colours:
             raise ValueError(
-                f"The following colours are not in the pallete but were assigned weights:\n{extra_colours}"
+                f"The following colours are not in the palette but were assigned weights:\n{extra_colours}"
             )
 
         return weights
