@@ -2,6 +2,7 @@
 Colour class for rubiks images.
 """
 
+from __future__ import annotations
 from lib import is_permutation, check_type
 from typing import Any, Iterable
 
@@ -104,6 +105,41 @@ class Colour(list):
         :return: None
         """
         raise NotImplementedError(f"show not yet implemented for Colour.")
+
+    @classmethod
+    def colour_average(
+        cls,
+        first_colour: Colour,
+        second_colour: Colour,
+        weights: list[float | int] | None = None,
+    ) -> Colour:
+        """
+        Find the average of two colours. Uses the channel format of the first colour.
+        :param first_colour: a Colour.
+        :param second_colour: a Colour.
+        :param weights: how much to weight each colour by.
+        :return: the average of the two colours.
+        """
+        # Set equal weights if not given:
+        if weights is None:
+            weights = [1, 1]
+        # Check that weights is the right format:
+        check_type(weights, [list, int], "weights")
+        # Make sure the colours are both using the first colour's channel format:
+        second_colour.reformat(first_colour.format)
+
+        # Calculate normalised weights:
+        [weight_1, weight_2] = [weight / sum(weights) for weight in weights]
+        # Use them to find the average of the two colours
+        new_values = [
+            round(weight_1 * first_colour_value + weight_2 * second_colour_value, None)
+            for first_colour_value, second_colour_value in zip(
+                first_colour.values, second_colour.values
+            )
+        ]
+
+        # Make it a colour:
+        return cls(new_values, first_colour.format)
 
     @staticmethod
     def __validate_iterable(iterable: Any) -> None:
