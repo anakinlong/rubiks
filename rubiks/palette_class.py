@@ -5,7 +5,6 @@ Palette class for rubiks images.
 from __future__ import annotations
 from .colour_class import Colour
 from .lib import check_type
-from typing import Any
 
 # The rubiks cube colours as a dictionary:
 RUBIKS_COLOUR_DICT = {
@@ -110,7 +109,7 @@ class Palette(dict):
         return combined_colour_dict
 
     @staticmethod
-    def __validate_key_value_pair(key: Any, value: Any) -> None:
+    def __validate_key_value_pair(key: str, value: Colour) -> None:
         """
         Check the given key, value pair is acceptable.
         :param key: a string key.
@@ -122,7 +121,7 @@ class Palette(dict):
         check_type(value, Colour, "a value")
 
     @staticmethod
-    def __validate_colour_dict(colour_dict: Any) -> None:
+    def __validate_colour_dict(colour_dict: dict[str, Colour]) -> None:
         """
         Check the given colour dict is acceptable.
         :param colour_dict: a dictionary mapping names to colours.
@@ -143,7 +142,7 @@ class PaletteWeights(dict):
     Colour weights. Basically a dictionary.
     """
 
-    def __init__(self, weights_dict: dict[str, float]) -> None:
+    def __init__(self, weights_dict: dict[str, float | int]) -> None:
         """
         Palette weights. Basically a dictionary.
 
@@ -186,7 +185,7 @@ class PaletteWeights(dict):
         self.__update()
 
     @staticmethod
-    def __validate_key_value_pair(key: Any, value: Any) -> None:
+    def __validate_key_value_pair(key: str, value: float | int) -> None:
         """
         Check the given key, value pair is acceptable.
         :param key: a string key.
@@ -198,7 +197,7 @@ class PaletteWeights(dict):
         check_type(value, [float, int], "a value")
 
     @staticmethod
-    def __validate_weights_dict(weights_dict: Any) -> None:
+    def __validate_weights_dict(weights_dict: dict[str, float | int]) -> None:
         """
         Check the given weights dict is acceptable.
         :param weights_dict: a dictionary mapping colour names to weights.
