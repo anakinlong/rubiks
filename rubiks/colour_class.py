@@ -110,8 +110,7 @@ class Colour(list):
         if not is_permutation(new_format, self.format):
             raise ValueError(
                 f"New channel format must be a permutation of the current format.\n"
-                f"Current: {self.format}"
-                f"New: {new_format}"
+                f"Current: {self.format} New: {new_format}"
             )
 
         # The new order of the channel indices in terms of the current format:
