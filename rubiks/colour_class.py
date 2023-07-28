@@ -7,7 +7,7 @@ from .lib import is_permutation, check_type
 from typing import Any, Iterable
 
 # Some defaults for Colour:
-DEFAULT_COLOUR = [0, 0, 0]
+DEFAULT_COLOUR_ITERABLE = [0, 0, 0]
 DEFAULT_CHANNEL_FORMAT = ["b", "g", "r"]
 
 
@@ -20,13 +20,13 @@ class Colour(list):
         """
         A colour :^). This is basically a list with a few extra features. Currently only supports 3 colour channels.
 
-        :param iterable: a list of colour channel values. Defaults to DEFAULT_COLOUR [0, 0, 0].
+        :param iterable: a list of colour channel values. Defaults to DEFAULT_COLOUR_ITERABLE [0, 0, 0].
         :param channel_format: the format of the colour channels, in the form of a list of strings. Defaults to
         DEFAULT_CHANNEL_FORMAT ["b", "g", "r"].
         """
         # Use defaults if input(s) not given:
         if iterable is None:
-            iterable = DEFAULT_COLOUR
+            iterable = DEFAULT_COLOUR_ITERABLE
         if channel_format is None:
             channel_format = DEFAULT_CHANNEL_FORMAT
         # Input validation:

@@ -6,14 +6,10 @@ from __future__ import annotations
 from .colour_class import Colour
 from .lib import check_type
 
-# The rubiks cube colours as a dictionary:
-RUBIKS_COLOUR_DICT = {
-    "g": Colour([72, 155, 0]),
-    "w": Colour([255, 255, 255]),
-    "r": Colour([52, 18, 183]),
-    "y": Colour([0, 213, 255]),
-    "b": Colour([173, 70, 0]),
-    "o": Colour([0, 88, 255]),
+# A simple dictionary containing black and white:
+DEFAULT_COLOUR_DICT = {
+    "white": Colour([255, 255, 255]),
+    "black": Colour([0, 0, 0]),
 }
 
 
@@ -27,11 +23,11 @@ class Palette(dict):
         A colour palette :^). Basically a dictionary. Maps colour names to Colours.
 
         :param colour_dict: a dictionary where the keys are colour names and the values are colours. Defaults to
-        RUBIKS_COLOUR_DICT.
+        DEFAULT_COLOUR_DICT.
         """
         # Use defaults if input(s) not given:
         if colour_dict is None:
-            colour_dict = RUBIKS_COLOUR_DICT
+            colour_dict = DEFAULT_COLOUR_DICT
         # Input validation:
         Palette.__validate_colour_dict(colour_dict)
 
@@ -169,8 +165,6 @@ class Palette(dict):
         for v in colour_dict.values():
             check_type(v, Colour, "a value in colour_dict")
 
-
-RUBIKS_PALETTE = Palette(RUBIKS_COLOUR_DICT)
 
 # TODO create a CombinedPalette class. This will be composed of two palettes - the original, and the one with ONLY the
 # colours formed from combinations of the original colours. Will make using it easier. Can also have a method to
