@@ -19,7 +19,7 @@ RUBIKS_COLOUR_DICT = {
 
 class Palette(dict):
     """
-    A colour palette :^). Basically a dictionary. TODO: use properties here
+    A colour palette :^). Basically a dictionary.
     """
 
     def __init__(self, colour_dict: dict[str, Colour] | None = None) -> None:
@@ -38,8 +38,32 @@ class Palette(dict):
         # Do regular dictionary stuff:
         super().__init__(colour_dict)
 
-        # Also update things that need updating:
+        # Initialise attributes as None then update them:
+        self._names = None
+        self._colours = None
+        self._colour_dict = None
         self.__update()
+
+    @property
+    def names(self):
+        """
+        The list of colour names. Equivalent of dictionary keys.
+        """
+        return self._names
+
+    @property
+    def colours(self):
+        """
+        The list of colours. Equivalent of dictionary values.
+        """
+        return self._colours
+
+    @property
+    def colour_dict(self):
+        """
+        The dictionary mapping colour names to colours. Equivalent of dictionary.
+        """
+        return self._colour_dict
 
     def __update(self) -> None:
         """
@@ -47,10 +71,10 @@ class Palette(dict):
         :return: None
         """
         # Colours and colour names:
-        self.names = list(self.keys())
-        self.colours = list(self.values())
+        self._names = list(self.keys())
+        self._colours = list(self.values())
         # Combined as a dictionary:
-        self.colour_dict = dict(zip(self.names, self.colours))
+        self._colour_dict = dict(zip(self._names, self._colours))
 
     def __setitem__(self, key: str, value: Colour) -> None:
         """
@@ -159,8 +183,32 @@ class PaletteWeights(dict):
         # Do regular dictionary stuff:
         super().__init__(weights_dict)
 
-        # Also update things that need updating:
+        # Initialise attributes as None then update them:
+        self._names = None
+        self._weights = None
+        self._weights_dict = None
         self.__update()
+
+    @property
+    def names(self):
+        """
+        The list of colour names. Equivalent of dictionary keys.
+        """
+        return self._names
+
+    @property
+    def weights(self):
+        """
+        The list of weights. Equivalent of dictionary values.
+        """
+        return self._weights
+
+    @property
+    def weights_dict(self):
+        """
+        The dictionary mapping colour names to weights. Equivalent of dictionary.
+        """
+        return self._weights_dict
 
     def __update(self) -> None:
         """
@@ -168,10 +216,10 @@ class PaletteWeights(dict):
         :return: None
         """
         # Weights and colour names:
-        self.names = list(self.keys())
-        self.weights = list(self.values())
+        self._names = list(self.keys())
+        self._weights = list(self.values())
         # Combined as a dictionary:
-        self.weights_dict = dict(zip(self.names, self.weights))
+        self._weights_dict = dict(zip(self._names, self._weights))
 
     def __setitem__(self, key: str, value: Colour) -> None:
         """
