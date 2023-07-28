@@ -1,5 +1,5 @@
 """
-Random useful functions.
+Random useful internal functions.
 """
 
 from typing import Any, Iterable
