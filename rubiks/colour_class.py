@@ -21,8 +21,8 @@ class Colour(list):
         A colour :^). This is basically a list with a few extra features. Currently only supports 3 colour channels.
 
         :param iterable: a list of colour channel values. Defaults to DEFAULT_COLOUR [0, 0, 0].
-        :param channel_format: the format of the colour channels, in the form of a list of strings.
-        Defaults to DEFAULT_CHANNEL_FORMAT ["b", "g", "r"].
+        :param channel_format: the format of the colour channels, in the form of a list of strings. Defaults to
+        DEFAULT_CHANNEL_FORMAT ["b", "g", "r"].
         """
         # Use defaults if input(s) not given:
         if iterable is None:
@@ -42,6 +42,7 @@ class Colour(list):
     def __update(self) -> None:
         """
         Update various attributes.
+
         :return: None
         """
         # The channel values as a list:
@@ -50,8 +51,10 @@ class Colour(list):
     def __setitem__(self, index: int, value: Any) -> None:
         """
         Set self[index] to value.
+
         :param index: the index.
-        :paran value: the value.
+        :param value: the value.
+
         :return: None
         """
         # Do the regular listy stuff:
@@ -66,7 +69,9 @@ class Colour(list):
     def channel_value(self, channel: str) -> int:
         """
         Return the value of a given colour channel.
+
         :param channel: the channel as a string.
+
         :return: the channel value
         """
         # Check the channel exists:
@@ -78,7 +83,9 @@ class Colour(list):
     def reformat(self, new_format: list[str]) -> None:
         """
         Change the order of the channel values to match a new format.
+
         :param new_format: a new channel format. Must be a permutation of the current format.
+
         :return: None
         """
         # Check the new format is a permutation of the current format:
@@ -113,9 +120,11 @@ class Colour(list):
     ) -> Colour:
         """
         Find the average of two colours. Uses the channel format of the first colour.
+
         :param first_colour: a Colour.
         :param second_colour: a Colour.
         :param weights: how much to weight each colour by.
+
         :return: the average of the two colours.
         """
         # Set equal weights if not given:
@@ -141,7 +150,9 @@ class Colour(list):
     def __validate_iterable(iterable: Any) -> None:
         """
         Check the given iterable is acceptable.
+
         :param iterable: an iterable (supposedly).
+
         :return: None
         """
         # Check the type is correct:
@@ -160,7 +171,9 @@ class Colour(list):
     def __validate_channel_format(channel_format: Any) -> None:
         """
         Check the given channel format is acceptable.
+
         :param channel_format: a list of channel names (supposedly).
+
         :return: None
         """
         # Check the type is correct:

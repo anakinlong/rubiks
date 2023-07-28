@@ -15,8 +15,7 @@ def is_permutation(list_1: list[Any], list_2: list[Any]) -> bool:
     :return answer: a bool of whether the lists are permutations of each other.
     """
     # We do this by sorting both of them and seeing if they produce the same sorted list:
-    answer = sorted(list_1) == sorted(list_2)
-    return answer
+    return sorted(list_1) == sorted(list_2)
 
 
 def check_type(object: object, types: type | Iterable[type], name: str | None = None) -> None:

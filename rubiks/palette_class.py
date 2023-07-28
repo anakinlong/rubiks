@@ -68,6 +68,7 @@ class Palette(dict):
     def __update(self) -> None:
         """
         Updates various attributes.
+
         :return: None
         """
         # Colours and colour names:
@@ -79,8 +80,10 @@ class Palette(dict):
     def __setitem__(self, key: str, value: Colour) -> None:
         """
         Set self[key] to value.
+
         :param key: a string key.
         :param value: a Colour value.
+
         :return: None
         """
         # Check that the key and value are valid inputs:
@@ -96,7 +99,9 @@ class Palette(dict):
     def create_combined_palette(cls, colour_dict: dict[str, Colour]) -> Palette:
         """
         Create a "combined" palette, where combinations of colours from the colour dict are also included.
+
         :param colour_dict: a dictionary mapping string colour names to colours.
+
         :return: a palette with combinations of colours.
         """
         # Combine the colour dict:
@@ -108,7 +113,9 @@ class Palette(dict):
     def __combine_colour_dict(colour_dict: dict[str, Colour]) -> dict[str, Colour]:
         """
         Create a "combined" colour dict, where combinations of colours from the colour dict are also included.
+
         :param colour_dict: a dictionary mapping string colour names to colours.
+
         :return: a colour dictionary with combinations of the colours.
         """
         combined_colour_dict = {}
@@ -134,8 +141,10 @@ class Palette(dict):
     def __validate_key_value_pair(key: str, value: Colour) -> None:
         """
         Check the given key, value pair is acceptable.
+
         :param key: a string key.
         :param value: a Colour value.
+
         :return: None
         """
         # Check they are the correct types:
@@ -146,7 +155,9 @@ class Palette(dict):
     def __validate_colour_dict(colour_dict: dict[str, Colour]) -> None:
         """
         Check the given colour dict is acceptable.
+
         :param colour_dict: a dictionary mapping names to colours.
+
         :return: None
         """
         # Check colour dict is a dictionary:
@@ -213,6 +224,7 @@ class PaletteWeights(dict):
     def __update(self) -> None:
         """
         Updates various attributes.
+
         :return: None
         """
         # Weights and colour names:
@@ -224,8 +236,10 @@ class PaletteWeights(dict):
     def __setitem__(self, key: str, value: Colour) -> None:
         """
         Set self[key] to value.
+
         :param key: a string key.
         :param value: a float or int value.
+
         :return: None
         """
         # Check that the key and value are valid inputs:
@@ -241,8 +255,10 @@ class PaletteWeights(dict):
     def __validate_key_value_pair(key: str, value: float | int) -> None:
         """
         Check the given key, value pair is acceptable.
+
         :param key: a string key.
         :param value: a float or int value.
+
         :return: None
         """
         # Check they are the correct types:
@@ -253,7 +269,9 @@ class PaletteWeights(dict):
     def __validate_weights_dict(weights_dict: dict[str, float | int]) -> None:
         """
         Check the given weights dict is acceptable.
+
         :param weights_dict: a dictionary mapping colour names to weights.
+
         :return: None
         """
         # Check weights dict is a dictionary:

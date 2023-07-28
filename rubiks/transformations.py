@@ -18,7 +18,9 @@ class Transformation(ABC):
     def transform_image(cls, image: cv2.Mat, *args, **kwargs) -> cv2.Mat:
         """
         Main transform method for an image.
+
         :param image: an image.
+
         :return: a transformed image.
         """
         return cls.__apply_to_all_pixels(image, cls.__transform_pixel, *args, **kwargs)
@@ -27,7 +29,9 @@ class Transformation(ABC):
     def __transform_pixel(cls, pixel: np.ndarray, *args, **kwargs) -> np.ndarray:
         """
         Main transform method for a pixel.
+
         :param pixel: a pixel.
+
         :return: a transformed pixel.
         """
         return pixel
@@ -42,8 +46,10 @@ class Transformation(ABC):
     ) -> cv2.Mat:
         """
         Apply a pixel transform method to all pixels in an image.
+
         :param image: an image.
         :param transformation: the method used to transform each pixel of the image.
+
         :return: the transformed image.
         """
         height, width = image.shape[:2]
@@ -72,10 +78,12 @@ class RecolourClosest(Transformation):
     ) -> cv2.Mat:
         """
         Recolour each pixel of an image by chosing the colour in the palette which is geometrically closest.
+
         :param image: an image in the form of a cv2.Mat.
         :param palette: a palette of colours from which the final image will be constructed.
         :param palette_weights: a map from colour names to "weights", which will determine how big of a sphere of
         influence each colour has. Defaults to all colours having equal weights.
+
         :return: an image (cv2.Mat) made up of the colours in the given palette.
         """
         # Input verification for the weights (if None, creates equal weight for each colour):
@@ -97,8 +105,10 @@ class RecolourClosest(Transformation):
     def __validate_weights(palette: Palette, palette_weights: PaletteWeights | None) -> PaletteWeights:
         """
         Do input validation for the palette weights.
+
         :param palette: a Palette of Colours.
         :param pallete_weights: a PaletteWeights instance.
+
         :return: palette_weights
         """
         # If we haven't been given any weights, assign each colour a weight of 1:
