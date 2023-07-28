@@ -3,7 +3,7 @@ Colour class for rubiks images.
 """
 
 from __future__ import annotations
-from lib import is_permutation, check_type
+from .lib import is_permutation, check_type
 from typing import Any, Iterable
 
 # Some defaults for Colour:
