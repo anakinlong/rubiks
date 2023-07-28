@@ -19,7 +19,7 @@ RUBIKS_COLOUR_DICT = {
 
 class Palette(dict):
     """
-    A colour palette :^). Basically a dictionary.
+    A colour palette :^). Basically a dictionary. TODO: use properties here
     """
 
     def __init__(self, colour_dict: dict[str, Colour] | None = None) -> None:
@@ -100,9 +100,7 @@ class Palette(dict):
                 # Combine the names:
                 new_name = name_1 + name_2
                 # Combine those two colours:
-                new_colour = Colour.colour_average(
-                    colour_dict[name_1], colour_dict[name_2]
-                )
+                new_colour = Colour.colour_average(colour_dict[name_1], colour_dict[name_2])
                 # Put them in the combined colour dictionary:
                 combined_colour_dict[new_name] = new_colour
 
@@ -135,6 +133,13 @@ class Palette(dict):
         # Check that all the values of the colour dict are Colours:
         for v in colour_dict.values():
             check_type(v, Colour, "a value in colour_dict")
+
+
+RUBIKS_PALETTE = Palette(RUBIKS_COLOUR_DICT)
+
+# TODO create a CombinedPalette class. This will be composed of two palettes - the original, and the one with ONLY the
+# colours formed from combinations of the original colours. Will make using it easier. Can also have a method to
+# create one single palette with all those colours together.
 
 
 class PaletteWeights(dict):
