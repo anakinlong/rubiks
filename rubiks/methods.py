@@ -13,7 +13,7 @@ def rubiks_dimension_estimator(
     width: int | None = None,
     height: int | None = None,
     image: cv2.Mat | None = None,
-):
+) -> tuple[int, int]:
     """
     Output the rubiks cube dimensions of an image.
 
