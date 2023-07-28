@@ -21,9 +21,7 @@ RUBIKS_COLOURS = {
 RUBIKS_COLOUR_WEIGHTS = {"g": 1.0, "w": 1.0, "r": 1.0, "y": 1.0, "b": 0.8, "o": 1.0}
 
 
-def scale_image(
-    image: cv2.Mat, f: int, interpolation: Union[str, None] = None
-) -> cv2.Mat:
+def scale_image(image: cv2.Mat, f: int, interpolation: Union[str, None] = None) -> cv2.Mat:
     """
     Scale an image, maintaining the aspect ratio.
 
@@ -87,16 +85,12 @@ def rubiks_dimension_estimator(
         print(f"Rubiks aspect ratio: {aspect_r}")
         print(f"Max cubes: {n_cubes}")
         print(f"Used cubes: {n_cubes_r}")
-        print(
-            f"Quantitative metric: {arrangement_metric(aspect, aspect_r, n_cubes, n_cubes_r)}"
-        )
+        print(f"Quantitative metric: {arrangement_metric(aspect, aspect_r, n_cubes, n_cubes_r)}")
 
     return image_dimensions_r
 
 
-def arrangement_metric(
-    aspect_i: float, aspect_r: float, n_cubes_i: int, n_cubes_r: int
-) -> float:
+def arrangement_metric(aspect_i: float, aspect_r: float, n_cubes_i: int, n_cubes_r: int) -> float:
     """
     Given an initial image with aspect ratio aspect_i, and a number of cubes n_cubes_i, a quantitative metric
     to find out how good a rubiks image with aspect ratio aspect_r and number of cubes n_cubes_r is. This metric
@@ -130,9 +124,7 @@ def arrangement_metric(
     return score
 
 
-def average_pixel_colour(
-    image: cv2.Mat, position_0: Tuple[float], position_1: Tuple[float]
-) -> np.ndarray[float]:
+def average_pixel_colour(image: cv2.Mat, position_0: Tuple[float], position_1: Tuple[float]) -> np.ndarray[float]:
     """
     Take a rectangular section of an image, and calculate the average pixel colour. The vertices of the rectangular
     aren't necessarily on the vertices of pixels, so we need to weight the average by the area of each pixel that
@@ -172,11 +164,7 @@ def average_pixel_colour(
 
         # Check that v_1 >= v_0:
         if not v_1 >= v_0:
-            raise ValueError(
-                f"v_1 must be greater than (or equal to) v_0:\n"
-                f"v_0: {v_0}\n"
-                f"v_1: {v_1}\n"
-            )
+            raise ValueError(f"v_1 must be greater than (or equal to) v_0:\n" f"v_0: {v_0}\n" f"v_1: {v_1}\n")
         # First value is always v_0:
         values = [v_0]
         done = False
@@ -200,9 +188,7 @@ def average_pixel_colour(
     # A 2D list for area values:
     area = np.ones((len(green_height_values) - 1, len(green_width_values) - 1))
     # The rectangular section of the image:
-    small_image = image[
-        math.floor(h_0) : math.ceil(h_1), math.floor(w_0) : math.ceil(w_1), :
-    ]
+    small_image = image[math.floor(h_0) : math.ceil(h_1), math.floor(w_0) : math.ceil(w_1), :]
     # Loop through each pixel and calculate how much of its area is in the rectangular section.
     # We already know that only the pixels around the edge of the rectangle are going to have an area not equal
     # to 1, so we start off with an array of ones and only modify the values around the edges:
@@ -260,9 +246,7 @@ def resize_image(image: cv2.Mat, dimensions: Tuple[int]) -> cv2.Mat:
     # Loop through these new big pixels and get the average colour of that area in the original image:
     for x in range(width_r):
         for y in range(height_r):
-            new_img[y, x] = average_pixel_colour(
-                image, coords[y, x], coords[y + 1, x + 1]
-            )
+            new_img[y, x] = average_pixel_colour(image, coords[y, x], coords[y + 1, x + 1])
 
     return new_img
 
@@ -298,9 +282,7 @@ def find_nearest_colour(colour: List[int], pallete: List[List[int]]) -> List[int
         min_index = np.random.choice(min_indices)
     # Otherwise, I have no idea:
     else:
-        raise ValueError(
-            f"Somehow there are zero or a negative amount of minimum distances (o_0)!"
-        )
+        raise ValueError(f"Somehow there are zero or a negative amount of minimum distances (o_0)!")
 
     # Get the closest colour
     closest_colour = pallete[min_index]
@@ -368,9 +350,7 @@ def find_nearest_colour_weighted(
         min_index = np.random.choice(min_indices)
     # Otherwise, I have no idea:
     else:
-        raise ValueError(
-            f"Somehow there are zero or a negative amount of minimum distances (o_0)!"
-        )
+        raise ValueError(f"Somehow there are zero or a negative amount of minimum distances (o_0)!")
 
     # Get the closest colour
     closest_colour = pallete[min_index]
@@ -410,9 +390,7 @@ def recolour_nearest_colour_weighted(
             # Find the current colour:
             original_colour = image[y, x]
             # Set it to the closest one from the pallete:
-            new_img[y, x] = find_nearest_colour_weighted(
-                original_colour, pallete, weights
-            )
+            new_img[y, x] = find_nearest_colour_weighted(original_colour, pallete, weights)
 
     return new_img
 
@@ -454,9 +432,7 @@ def plane_colour(
             return [127, 127, 127]
 
     # Work out the t value:
-    t = (d - np.sum(np.multiply([a, b, c], origin))) / np.sum(
-        np.subtract(colour, origin)
-    )
+    t = (d - np.sum(np.multiply([a, b, c], origin))) / np.sum(np.subtract(colour, origin))
 
     # Project the colour using the t value:
     new_colour = np.add(origin, np.multiply(t, np.multiply([a, b, c], colour)))
@@ -530,10 +506,7 @@ def recolour_image(image: cv2.Mat, method: str, pallete: List[List[int]]) -> cv2
 
     # Check that the method is a valid one:
     if method not in methods:
-        raise ValueError(
-            f"'{method}' is not a valid method. Please choose from:\n"
-            f"{list(methods)}"
-        )
+        raise ValueError(f"'{method}' is not a valid method. Please choose from:\n" f"{list(methods)}")
 
     # Use the recolouring method to recolour our image:
     try:
@@ -542,8 +515,7 @@ def recolour_image(image: cv2.Mat, method: str, pallete: List[List[int]]) -> cv2
     except:
         # If the method name is in the dictionary, but the function doesn't work:
         raise NotImplementedError(
-            f"'{method}' has not yet been implemented. Please choose a different method from:\n"
-            f"{list(methods)}"
+            f"'{method}' has not yet been implemented. Please choose a different method from:\n" f"{list(methods)}"
         )
 
     return new_img
@@ -688,9 +660,7 @@ def main(
 
     # Get its dimensions, then estimate the best dimensions for the final image:
     height, width = im.shape[:2]
-    (new_height, new_width) = rubiks_dimension_estimator(
-        width, height, n_cubes, reporting=True
-    )
+    (new_height, new_width) = rubiks_dimension_estimator(width, height, n_cubes, reporting=True)
 
     # Create a real-colour version of the final image:
     new_im = resize_image(im, (new_height, new_width))

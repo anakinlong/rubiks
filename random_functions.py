@@ -32,9 +32,7 @@ def check_type(var: Any, types: List[type], name: str) -> None:
     """
 
     if type(var) not in types:
-        raise TypeError(
-            f"{type(var)} is an invalid type for {name}. Must be from {types}."
-        )
+        raise TypeError(f"{type(var)} is an invalid type for {name}. Must be from {types}.")
 
 
 if __name__ == "__main__":

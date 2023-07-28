@@ -19,9 +19,7 @@ def is_permutation(list_1: list[Any], list_2: list[Any]) -> bool:
     return answer
 
 
-def check_type(
-    object: object, types: type | Iterable[type], name: str | None = None
-) -> None:
+def check_type(object: object, types: type | Iterable[type], name: str | None = None) -> None:
     """
     Checks that the type of a variable is one of the expected types, and raise an error if not.
 
@@ -38,9 +36,7 @@ def check_type(
     if not isinstance(object, types):
         if name is None:
             name = "<this object>"
-        raise TypeError(
-            f"{type(object)} is an invalid type for {name} ({object}). Must be from {types}."
-        )
+        raise TypeError(f"{type(object)} is an invalid type for {name} ({object}). Must be from {types}.")
 
 
 if __name__ == "__main__":

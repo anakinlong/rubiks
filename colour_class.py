@@ -11,9 +11,7 @@ DEFAULT_FORMAT = ["b", "g", "r"]
 
 
 class Colour(list):
-    def __init__(
-        self, iterable: Union[Iterable, None] = None, channel_format: List[str] = None
-    ):
+    def __init__(self, iterable: Union[Iterable, None] = None, channel_format: List[str] = None):
         """
         A colour :^). This is basically a list with a few extra features. Currently only supports 3 colour channels.
 
@@ -42,9 +40,7 @@ class Colour(list):
             channel_format = DEFAULT_FORMAT
         # Check there are no duplicates:
         if len(channel_format) != len(set(channel_format)):
-            raise ValueError(
-                f"Duplicate channel name in the channel format:\n" f"{channel_format}"
-            )
+            raise ValueError(f"Duplicate channel name in the channel format:\n" f"{channel_format}")
         self.format = channel_format
 
         # Also update things that need updating:
@@ -96,8 +92,7 @@ class Colour(list):
         # Check that the new format is a permutation of the current:
         if not rf.is_permutation(new_format, self.format):
             raise ValueError(
-                f"Invalid format specified. Please use a permutation of the current format:\n"
-                f"{self.format}"
+                f"Invalid format specified. Please use a permutation of the current format:\n" f"{self.format}"
             )
 
         # Get the indices of the channels of the new format in terms of the old one:
