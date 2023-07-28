@@ -36,17 +36,37 @@ class Colour(list):
         # Set the colour channel format as an attribute:
         self.format = channel_format
 
-        # Update the list:
+        # Initialise attributes as None then update them:
+        self._values = None
+        self._format = None
         self.__update()
 
-    def __update(self) -> None:
+    @property
+    def values(self):
+        """
+        The list of colour channel values.
+        """
+        return self._values
+
+    @property
+    def format(self):
+        """
+        The list of colour channel names.
+        """
+        return self._format
+
+    def __update(self, channel_format: list[str]) -> None:
         """
         Update various attributes.
+
+        :param channel_format: the format of the colour channels.
 
         :return: None
         """
         # The channel values as a list:
-        self.values = [element for element in self]
+        self._values = [element for element in self]
+        # The channel format as a list:
+        self._format = channel_format
 
     def __setitem__(self, index: int, value: Any) -> None:
         """
@@ -147,7 +167,7 @@ class Colour(list):
         return cls(new_values, first_colour.format)
 
     @staticmethod
-    def __validate_iterable(iterable: Any) -> None:
+    def __validate_iterable(iterable: Iterable[int]) -> None:
         """
         Check the given iterable is acceptable.
 
@@ -168,7 +188,7 @@ class Colour(list):
             check_type(element, int, "an element of the colour iterable")
 
     @staticmethod
-    def __validate_channel_format(channel_format: Any) -> None:
+    def __validate_channel_format(channel_format: list[str]) -> None:
         """
         Check the given channel format is acceptable.
 
