@@ -1,3 +1,5 @@
-from lib import *
-from colour_class import Colour, DEFAULT_COLOUR, DEFAULT_FORMAT
-from pallete_class import Pallete, RUBIKS_PALLETE
+# from .lib import *
+from .methods import *
+from .colour_class import Colour
+from .palette_class import Palette, PaletteWeights, RUBIKS_PALETTE
+from .transformations import RecolourClosest
