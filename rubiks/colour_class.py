@@ -173,7 +173,7 @@ class Colour(list):
         check_type(channel_format, list, "the channel_format")
         # Check the types of the elements are correct:
         for channel in channel_format:
-            check_type(channel, int, "an element of the channel format list")
+            check_type(channel, str, "an element of the channel format list")
         # Check there are no duplicates:
         if len(channel_format) != len(set(channel_format)):
             raise ValueError(
