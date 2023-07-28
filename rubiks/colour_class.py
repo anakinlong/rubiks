@@ -33,13 +33,10 @@ class Colour(list):
         Colour.__validate_iterable(iterable)
         Colour.__validate_channel_format(channel_format)
 
-        # Set the colour channel format as an attribute:
-        self.format = channel_format
-
         # Initialise attributes as None then update them:
         self._values = None
         self._format = None
-        self.__update()
+        self.__update(channel_format)
 
     @property
     def values(self):
@@ -55,7 +52,7 @@ class Colour(list):
         """
         return self._format
 
-    def __update(self, channel_format: list[str]) -> None:
+    def __update(self, channel_format: list[str] | None = None) -> None:
         """
         Update various attributes.
 
@@ -66,7 +63,8 @@ class Colour(list):
         # The channel values as a list:
         self._values = [element for element in self]
         # The channel format as a list:
-        self._format = channel_format
+        if channel_format is not None:
+            self._format = channel_format
 
     def __setitem__(self, index: int, value: Any) -> None:
         """
