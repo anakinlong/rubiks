@@ -36,9 +36,3 @@ def check_type(object: object, types: type | Iterable[type], name: str | None = 
         if name is None:
             name = "<this object>"
         raise TypeError(f"{type(object)} is an invalid type for {name} ({object}). Must be from {types}.")
-
-
-if __name__ == "__main__":
-
-    a = 10
-    check_type(a, [str, list], "a")
