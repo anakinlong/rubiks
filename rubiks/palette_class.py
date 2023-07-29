@@ -116,12 +116,12 @@ class Palette(dict):
         """
         combined_colour_dict = {}
         # Get the colour names:
-        names = colour_dict.keys()
+        names = list(colour_dict.keys())
         number_of_names = len(names)
 
         # Loop through the combinations without repeating:
         for i in range(number_of_names):
-            for j in range(number_of_names - i):
+            for j in range(i + 1, number_of_names):
                 # Get the two names:
                 name_1, name_2 = names[i], names[j]
                 # Combine the names:
@@ -131,7 +131,17 @@ class Palette(dict):
                 # Put them in the combined colour dictionary:
                 combined_colour_dict[new_name] = new_colour
 
-        return combined_colour_dict
+        # Check that these two dictionaries do not share any keys:
+        if any(key in colour_dict for key in combined_colour_dict) or any(
+            key in combined_colour_dict for key in colour_dict
+        ):
+            raise ValueError(
+                "Colour dict contains names such that combinations of them already exist in the names:\n"
+                f"{colour_dict.keys()}"
+            )
+
+        # Add these combined colours to the existing colours:
+        return colour_dict | combined_colour_dict
 
     @staticmethod
     def __validate_key_value_pair(key: str, value: Colour) -> None:
