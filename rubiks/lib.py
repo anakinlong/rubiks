@@ -1,5 +1,5 @@
 """
-Random useful functions.
+Random useful internal functions.
 """
 
 from typing import Any, Iterable
@@ -15,8 +15,7 @@ def is_permutation(list_1: list[Any], list_2: list[Any]) -> bool:
     :return answer: a bool of whether the lists are permutations of each other.
     """
     # We do this by sorting both of them and seeing if they produce the same sorted list:
-    answer = (sorted(list_1) == sorted(list_2))
-    return answer
+    return sorted(list_1) == sorted(list_2)
 
 
 def check_type(object: object, types: type | Iterable[type], name: str | None = None) -> None:
@@ -36,12 +35,4 @@ def check_type(object: object, types: type | Iterable[type], name: str | None = 
     if not isinstance(object, types):
         if name is None:
             name = "<this object>"
-        raise TypeError(
-            f"{type(object)} is an invalid type for {name} ({object}). Must be from {types}."
-        )
-
-
-if __name__ == "__main__":
-
-    a = 10
-    check_type(a, [str, list], "a")
+        raise TypeError(f"{type(object)} is an invalid type for {name} ({object}). Must be from {types}.")
