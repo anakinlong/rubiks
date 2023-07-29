@@ -7,12 +7,14 @@ from .palette_class import Palette
 
 
 # From Colour:
-RUBIKS_GREEN = Colour([72, 155, 0])
-RUBIKS_WHITE = Colour([255, 255, 255])
-RUBIKS_RED = Colour([52, 18, 183])
-RUBIKS_YELLOW = Colour([0, 213, 255])
-RUBIKS_BLUE = Colour([173, 70, 0])
-RUBIKS_ORANGE = Colour([0, 88, 255])
+CV2_CHANNEL_FORMAT = ["b", "g", "r"]
+
+RUBIKS_GREEN = Colour([72, 155, 0], channel_format=CV2_CHANNEL_FORMAT)
+RUBIKS_WHITE = Colour([255, 255, 255], channel_format=CV2_CHANNEL_FORMAT)
+RUBIKS_RED = Colour([52, 18, 183], channel_format=CV2_CHANNEL_FORMAT)
+RUBIKS_YELLOW = Colour([0, 213, 255], channel_format=CV2_CHANNEL_FORMAT)
+RUBIKS_BLUE = Colour([173, 70, 0], channel_format=CV2_CHANNEL_FORMAT)
+RUBIKS_ORANGE = Colour([0, 88, 255], channel_format=CV2_CHANNEL_FORMAT)
 
 # From Palette:
 RUBIKS_PALETTE = Palette(
