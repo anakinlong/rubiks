@@ -11,6 +11,7 @@ DEFAULT_COLOUR_ITERABLE = [0, 0, 0]
 DEFAULT_CHANNEL_FORMAT = ["b", "g", "r"]
 
 
+# TODO I feel like Colour should maybe be a dictionary rather than a list, idk
 class Colour(list):
     """
     A colour :^). This is basically a list with a few extra features. Currently only supports 3 colour channels.
@@ -127,6 +128,7 @@ class Colour(list):
     def show(self) -> None:
         """
         Show this colour.
+
         :return: None
         """
         raise NotImplementedError("show not yet implemented for Colour.")
@@ -151,7 +153,7 @@ class Colour(list):
         if weights is None:
             weights = [1, 1]
         # Check that weights is the right format:
-        check_type(weights, [list, int], "weights")
+        check_type(weights, list, "weights")
         # Make sure the colours are both using the first colour's channel format:
         second_colour.reformat(first_colour.format)
 
