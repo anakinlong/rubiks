@@ -84,9 +84,17 @@ class RecolourClosestTest(unittest.TestCase):
         )
         self.palette = Palette()
 
-    def test_regular(self) -> None:
+    def test_regular_weights(self) -> None:
         """
-        Test that applying the RecolourClosest transformation on an image returns the correct result.
+        Test that applying the RecolourClosest transformation on an image returns the correct result when using palette
+        weights.
+        """
+        # TODO write this test once the class is finished
+
+    def test_regular_no_weights(self) -> None:
+        """
+        Test that applying the RecolourClosest transformation on an image returns the correct result when not using
+        palette weights.
         """
         # TODO write this test once the class is finished
 
