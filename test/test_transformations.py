@@ -28,6 +28,20 @@ class TransformationTest(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             Transformation.transform_image(self.image)
 
+    def test_inheritance(self) -> None:
+        """
+        Test that inheriting from Transformation without defining a _transform_pixel method results in a
+        NotImplementedError when applying that transformation to an image.
+        """
+
+        class NewTransformation(Transformation):
+            """
+            A new transformation
+            """
+
+        with self.assertRaises(NotImplementedError):
+            NewTransformation.transform_image(self.image)
+
 
 class NoneTransformationTest(unittest.TestCase):
     """
