@@ -89,14 +89,41 @@ class RecolourClosestTest(unittest.TestCase):
         Test that applying the RecolourClosest transformation on an image returns the correct result when using palette
         weights.
         """
-        # TODO write this test once the class is finished
+        weights = PaletteWeights({"white": 150, "black": 1})
+        equivalent_image = np.array(
+            [
+                [[0, 0, 0], [0, 0, 0], [255, 255, 255]],
+                [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
+                [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
+            ],
+            dtype=np.uint8,
+        )
+        np.testing.assert_array_equal(
+            RecolourClosest.transform_image(self.image, Palette(), palette_weights=weights), equivalent_image
+        )
 
     def test_regular_no_weights(self) -> None:
         """
         Test that applying the RecolourClosest transformation on an image returns the correct result when not using
         palette weights.
         """
-        # TODO write this test once the class is finished
+        image = np.array(
+            [
+                [[1, 1, 1], [2, 2, 2], [155, 155, 155]],
+                [[155, 155, 155], [255, 255, 255], [255, 255, 255]],
+                [[255, 255, 255], [255, 255, 255], [55, 55, 55]],
+            ],
+            dtype=np.uint8,
+        )
+        equivalent_image = np.array(
+            [
+                [[0, 0, 0], [0, 0, 0], [255, 255, 255]],
+                [[255, 255, 255], [255, 255, 255], [255, 255, 255]],
+                [[255, 255, 255], [255, 255, 255], [0, 0, 0]],
+            ],
+            dtype=np.uint8,
+        )
+        np.testing.assert_array_equal(RecolourClosest.transform_image(image, Palette()), equivalent_image)
 
     def test_missing_weights(self) -> None:
         """
