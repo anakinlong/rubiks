@@ -11,7 +11,6 @@ DEFAULT_COLOUR_ITERABLE = [0, 0, 0]
 DEFAULT_CHANNEL_FORMAT = ["b", "g", "r"]
 
 
-# TODO I feel like Colour should maybe be a dictionary rather than a list, idk
 class Colour(list):
     """
     A colour :^). This is basically a list with a few extra features. Currently only supports 3 colour channels.
