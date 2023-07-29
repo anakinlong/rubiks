@@ -118,7 +118,7 @@ class RecolourClosest(Transformation):
         """
         # Measure the Euclidean distance to the pixel colour of each colour in the palette:
         distances = {
-            colour_name: np.linalg.norm(pixel - np.array(colour)) * palette_weights[colour_name]
+            colour_name: np.linalg.norm(pixel - np.array(colour)) / palette_weights[colour_name]
             for colour_name, colour in palette.colour_dict.items()
         }
 
