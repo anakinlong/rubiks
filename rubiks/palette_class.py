@@ -181,6 +181,7 @@ class Palette(dict):
 # create one single palette with all those colours together.
 
 
+# TODO implement normalised versions of .weights and .weights_dict
 class PaletteWeights(dict):
     """
     Colour weights. Basically a dictionary.
