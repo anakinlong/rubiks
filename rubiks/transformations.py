@@ -89,6 +89,7 @@ class RecolourClosest(Transformation):
         # Input verification for the weights (if None, creates equal weight for each colour):
         palette_weights = cls.__validate_weights(palette, palette_weights)
 
+        # TODO this doesn't work - it ends up using the parent class' __transform_pixel method :(
         return super().transform_image(image, palette, palette_weights)
 
     @classmethod
