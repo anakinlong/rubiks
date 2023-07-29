@@ -2,7 +2,7 @@ import numpy as np
 import unittest
 
 from rubiks.palette_class import Palette, PaletteWeights
-from rubiks.transformations import Transformation, RecolourClosest
+from rubiks.transformations import Transformation, NoneTransformation, RecolourClosest
 
 
 class TransformationTest(unittest.TestCase):
@@ -23,9 +23,34 @@ class TransformationTest(unittest.TestCase):
 
     def test_regular(self) -> None:
         """
-        Test that applying a blank transformation on an image returns that image.
+        Test that attempting to transform an image using the base Transformation class raises a NotImplementedError.
         """
-        np.testing.assert_array_equal(Transformation.transform_image(self.image), self.image)
+        with self.assertRaises(NotImplementedError):
+            Transformation.transform_image(self.image)
+
+
+class NoneTransformationTest(unittest.TestCase):
+    """
+    Test the NoneTransformation class.
+    """
+
+    def setUp(self) -> None:
+
+        self.image = np.array(
+            [
+                [[0, 0, 0], [1, 1, 1], [2, 2, 2]],
+                [[3, 3, 3], [4, 4, 4], [5, 5, 5]],
+                [[6, 6, 6], [7, 7, 7], [8, 8, 8]],
+            ],
+            dtype=np.uint8,
+        )
+        self.palette = Palette()
+
+    def test_regular(self) -> None:
+        """
+        Test that applying the NoneTransformation transformation on an image returns the same image.
+        """
+        np.testing.assert_array_equal(NoneTransformation.transform_image(self.image, self.palette), self.image)
 
 
 class RecolourClosestTest(unittest.TestCase):

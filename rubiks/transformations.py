@@ -2,10 +2,9 @@
 Rubiks image transformations.
 """
 
-from abc import ABC
+from abc import ABC, abstractmethod
 import numpy as np
 import cv2
-from typing import Any, Callable
 from .palette_class import Palette, PaletteWeights
 
 
@@ -23,24 +22,24 @@ class Transformation(ABC):
 
         :return: a transformed image.
         """
-        return cls.__apply_to_all_pixels(image, cls.__transform_pixel, *args, **kwargs)
+        return cls._apply_to_all_pixels(image, *args, **kwargs)
 
     @classmethod
-    def __transform_pixel(cls, pixel: np.ndarray, *args, **kwargs) -> np.ndarray:
+    @abstractmethod
+    def _transform_pixel(cls, pixel: np.ndarray, *args, **kwargs) -> np.ndarray:
         """
-        Main transform method for a pixel.
+        Main transform method for a pixel. Must be implemented by child classes.
 
         :param pixel: a pixel.
 
         :return: a transformed pixel.
         """
-        return pixel
+        raise NotImplementedError("_transform_pixel not implemented for base Transformation class")
 
     @classmethod
-    def __apply_to_all_pixels(
+    def _apply_to_all_pixels(
         cls,
         image: cv2.Mat,
-        transformation: Callable[[np.ndarray, Any], np.ndarray],
         *args,
         **kwargs,
     ) -> cv2.Mat:
@@ -48,7 +47,6 @@ class Transformation(ABC):
         Apply a pixel transform method to all pixels in an image.
 
         :param image: an image.
-        :param transformation: the method used to transform each pixel of the image.
 
         :return: the transformed image.
         """
@@ -59,9 +57,20 @@ class Transformation(ABC):
                 # Find the current pixel:
                 original_pixel = image[y, x]
                 # Transform it:
-                transformed_image[y, x] = transformation(original_pixel, *args, **kwargs)
+                transformed_image[y, x] = cls._transform_pixel(original_pixel, *args, **kwargs)
 
         return transformed_image
+
+
+class NoneTransformation(Transformation):
+    """
+    Keep each pixel exactly the same colour.
+    """
+
+    @classmethod
+    def _transform_pixel(cls, pixel: np.ndarray, *args, **kwargs) -> np.ndarray:
+
+        return pixel
 
 
 class RecolourClosest(Transformation):
@@ -89,18 +98,9 @@ class RecolourClosest(Transformation):
         # Input verification for the weights (if None, creates equal weight for each colour):
         palette_weights = cls.__validate_weights(palette, palette_weights)
 
-        # TODO this doesn't work - it ends up using the parent class' __transform_pixel method :(
-        return super().transform_image(image, palette, palette_weights)
+        return cls._apply_to_all_pixels(image, palette, palette_weights)
 
-    @classmethod
-    def __transform_pixel(
-        cls,
-        pixel: np.ndarray,
-        palette: Palette,
-        palette_weights: PaletteWeights | None = None,
-    ) -> np.ndarray:
-        # TODO implement
-        return super().__transform_pixel(pixel, palette, palette_weights)
+    # TODO implement _transform_pixel()
 
     @staticmethod
     def __validate_weights(palette: Palette, palette_weights: PaletteWeights | None) -> PaletteWeights:
