@@ -33,6 +33,9 @@ class Colour(list):
         Colour.__validate_iterable(iterable)
         Colour.__validate_channel_format(channel_format)
 
+        # Do regular listy stuff:
+        super().__init__(iterable)
+
         # Initialise attributes as None then update them:
         self._values = None
         self._format = None
