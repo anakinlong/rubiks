@@ -117,11 +117,11 @@ class Palette(dict):
         combined_colour_dict = {}
         # Get the colour names:
         names = colour_dict.keys()
-        l = len(names)
+        number_of_names = len(names)
 
         # Loop through the combinations without repeating:
-        for i in range(l):
-            for j in range(l - i):
+        for i in range(number_of_names):
+            for j in range(number_of_names - i):
                 # Get the two names:
                 name_1, name_2 = names[i], names[j]
                 # Combine the names:

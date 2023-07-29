@@ -126,7 +126,7 @@ class Colour(list):
         Show this colour.
         :return: None
         """
-        raise NotImplementedError(f"show not yet implemented for Colour.")
+        raise NotImplementedError("show not yet implemented for Colour.")
 
     @classmethod
     def colour_average(
@@ -175,8 +175,8 @@ class Colour(list):
         # Check the type is correct:
         try:
             iter(iterable)
-        except:
-            raise TypeError(f"{type(iterable)} object is not iterable.\n{iterable}")
+        except TypeError:
+            raise
         # Check the length is correct:
         if len(iterable) != 3:
             raise ValueError(f"Iterable must have exactly 3 elements. Found {len(iterable)}.\n{iterable}")
