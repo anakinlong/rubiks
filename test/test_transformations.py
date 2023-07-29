@@ -1,0 +1,68 @@
+import numpy as np
+import unittest
+
+from rubiks.palette_class import Palette, PaletteWeights
+from rubiks.transformations import Transformation, RecolourClosest
+
+
+class TransformationTest(unittest.TestCase):
+    """
+    Test the Transformation class.
+    """
+
+    def setUp(self) -> None:
+
+        self.image = np.array(
+            [
+                [[0, 0, 0], [1, 1, 1], [2, 2, 2]],
+                [[3, 3, 3], [4, 4, 4], [5, 5, 5]],
+                [[6, 6, 6], [7, 7, 7], [8, 8, 8]],
+            ],
+            dtype=np.uint8,
+        )
+
+    def test_regular(self) -> None:
+        """
+        Test that applying a blank transformation on an image returns that image.
+        """
+        np.testing.assert_array_equal(Transformation.transform_image(self.image), self.image)
+
+
+class RecolourClosestTest(unittest.TestCase):
+    """
+    Test the RecolourClosest class.
+    """
+
+    def setUp(self) -> None:
+
+        self.image = np.array(
+            [
+                [[0, 0, 0], [1, 1, 1], [2, 2, 2]],
+                [[3, 3, 3], [4, 4, 4], [5, 5, 5]],
+                [[6, 6, 6], [7, 7, 7], [8, 8, 8]],
+            ],
+            dtype=np.uint8,
+        )
+        self.palette = Palette()
+
+    def test_regular(self) -> None:
+        """
+        Test that applying the RecolourClosest transformation on an image returns the correct result.
+        """
+        np.testing.assert_array_equal(RecolourClosest.transform_image(self.image, self.palette), self.image)
+
+    def test_missing_weights(self) -> None:
+        """
+        Test that supplying PaletteWeights with one of the colours missing raises a ValueError.
+        """
+        invalid_weights = PaletteWeights({"white": 1})
+        with self.assertRaises(ValueError):
+            RecolourClosest.transform_image(self.image, self.palette, palette_weights=invalid_weights)
+
+    def test_extra_weights(self) -> None:
+        """
+        Test that supplying PaletteWeights with one of the colours missing raises a ValueError.
+        """
+        invalid_weights = PaletteWeights({"white": 1, "black": 2, "extra": 3})
+        with self.assertRaises(ValueError):
+            RecolourClosest.transform_image(self.image, self.palette, palette_weights=invalid_weights)
