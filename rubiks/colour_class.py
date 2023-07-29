@@ -200,6 +200,9 @@ class Colour(list):
         """
         # Check the type is correct:
         check_type(channel_format, list, "the channel_format")
+        # Check the length is correct:
+        if len(channel_format) != 3:
+            raise ValueError(f"Iterable must have exactly 3 elements. Found {len(channel_format)}.\n{channel_format}")
         # Check the types of the elements are correct:
         for channel in channel_format:
             check_type(channel, str, "an element of the channel format list")
