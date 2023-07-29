@@ -43,7 +43,7 @@ def scale_image(image: cv2.Mat, f: int, interpolation: Union[str, None] = None) 
     dim = (f * width, f * height)
 
     # Set that as the new dimensions:
-    if interpolation == None:
+    if interpolation is None:
         interpolation = cv2.INTER_NEAREST
     new_img = cv2.resize(image, dim, interpolation=interpolation)
 
@@ -52,7 +52,7 @@ def scale_image(image: cv2.Mat, f: int, interpolation: Union[str, None] = None) 
 
 def rubiks_dimension_estimator(
     width: int, height: int, n_cubes: int, d: int = 3, reporting: bool = False
-) -> tuple(int):
+) -> tuple[int]:
     """
     Output the rubiks cube dimensions of an image.
 
@@ -282,7 +282,7 @@ def find_nearest_colour(colour: List[int], pallete: List[List[int]]) -> List[int
         min_index = np.random.choice(min_indices)
     # Otherwise, I have no idea:
     else:
-        raise ValueError(f"Somehow there are zero or a negative amount of minimum distances (o_0)!")
+        raise ValueError("Somehow there are zero or a negative amount of minimum distances (o_0)!")
 
     # Get the closest colour
     closest_colour = pallete[min_index]
@@ -350,7 +350,7 @@ def find_nearest_colour_weighted(
         min_index = np.random.choice(min_indices)
     # Otherwise, I have no idea:
     else:
-        raise ValueError(f"Somehow there are zero or a negative amount of minimum distances (o_0)!")
+        raise ValueError("Somehow there are zero or a negative amount of minimum distances (o_0)!")
 
     # Get the closest colour
     closest_colour = pallete[min_index]
@@ -428,7 +428,7 @@ def plane_colour(
             v = int(d / (a + b + c))
             return list(np.clip([v, v, v], 0, 255))
         # In the case that a + b + c = 0:
-        except:
+        except ZeroDivisionError:
             return [127, 127, 127]
 
     # Work out the t value:
@@ -510,9 +510,9 @@ def recolour_image(image: cv2.Mat, method: str, pallete: List[List[int]]) -> cv2
 
     # Use the recolouring method to recolour our image:
     try:
-        f: function = methods[method]
+        f = methods[method]
         new_img = f(image, pallete)
-    except:
+    except KeyError:
         # If the method name is in the dictionary, but the function doesn't work:
         raise NotImplementedError(
             f"'{method}' has not yet been implemented. Please choose a different method from:\n" f"{list(methods)}"
@@ -576,7 +576,7 @@ def colour_range(image: cv2.Mat, channel: Union[int, str]) -> Tuple[int]:
     if channel in channel_names:
         channel = channel_names.index(channel)
     if type(channel) is not int:
-        raise TypeError(f"cba to write this error rn")
+        raise TypeError("cba to write this error rn")
 
     # Find min and max:
     channel_values = image[:, :, channel]
@@ -675,7 +675,7 @@ def main(
     cv2.imshow("im", horizontal)
     cv2.waitKey(0)
 
-    cv2.imwrite("Rubiks Images\mona lisa rbks.png", new_new_im)
+    cv2.imwrite("Rubiks Images\\mona lisa rbks.png", new_new_im)
 
 
 if __name__ == "__main__":
