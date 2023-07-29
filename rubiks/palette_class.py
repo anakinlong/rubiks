@@ -41,21 +41,21 @@ class Palette(dict):
         self.__update()
 
     @property
-    def names(self):
+    def names(self) -> list[str]:
         """
         The list of colour names. Equivalent of dictionary keys.
         """
         return self._names
 
     @property
-    def colours(self):
+    def colours(self) -> list[Colour]:
         """
         The list of colours. Equivalent of dictionary values.
         """
         return self._colours
 
     @property
-    def colour_dict(self):
+    def colour_dict(self) -> dict[str, Colour]:
         """
         The dictionary mapping colour names to colours. Equivalent of dictionary.
         """
