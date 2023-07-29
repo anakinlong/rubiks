@@ -70,6 +70,23 @@ class PaletteTest(unittest.TestCase):
         )
         self.assertEqual(self.rubiks_palette, equivalent_palette)
 
+    def test_reformat(self) -> None:
+        """
+        Test that reformatting the colour channels of all the colours works.
+        """
+        self.rubiks_palette.reformat(["r", "g", "b"])
+        equivalent_palette = Palette(
+            {
+                "green": Colour([0, 155, 72], channel_format=["r", "g", "b"]),
+                "white": Colour([255, 255, 255], channel_format=["r", "g", "b"]),
+                "red": Colour([183, 18, 52], channel_format=["r", "g", "b"]),
+                "yellow": Colour([255, 213, 0], channel_format=["r", "g", "b"]),
+                "blue": Colour([0, 70, 173], channel_format=["r", "g", "b"]),
+                "orange": Colour([255, 88, 0], channel_format=["r", "g", "b"]),
+            }
+        )
+        self.assertEqual(self.rubiks_palette, equivalent_palette)
+
     def test_combine_colour_dict(self) -> None:
         """
         Test that the __combine_colour_dict method produces the expected result.

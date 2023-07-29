@@ -91,6 +91,20 @@ class Palette(dict):
         # Also update things that need updating:
         self.__update()
 
+    def reformat(self, new_format: list[str]) -> None:
+        """
+        Change the order of the channel values in all colours to match a new format.
+
+        :param new_format: a new channel format. Must be a permutation of the current formats.
+
+        :return: None
+        """
+        # Reformat each colour:
+        for colour in self._colours:
+            colour.reformat(new_format)
+        # Update other attributes:
+        self.__update()
+
     @classmethod
     def create_combined_palette(cls, colour_dict: dict[str, Colour]) -> Palette:
         """
