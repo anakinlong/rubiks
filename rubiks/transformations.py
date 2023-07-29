@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 import cv2
 from .palette_class import Palette, PaletteWeights
+from .constants import CV2_CHANNEL_FORMAT
 
 
 class Transformation(ABC):
@@ -95,15 +96,60 @@ class RecolourClosest(Transformation):
 
         :return: an image (cv2.Mat) made up of the colours in the given palette.
         """
+        # Input verification for the palette:
+        palette = cls._validate_palette(palette)
         # Input verification for the weights (if None, creates equal weight for each colour):
-        palette_weights = cls.__validate_weights(palette, palette_weights)
+        palette_weights = cls._validate_weights(palette, palette_weights)
 
         return cls._apply_to_all_pixels(image, palette, palette_weights)
 
-    # TODO implement _transform_pixel()
+    @classmethod
+    def _transform_pixel(cls, pixel: np.ndarray, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
+        """
+        Change the colour of the pixel to the one from the palette which is geometrically closest.
+
+        :param pixel: a pixel.
+        :param palette: a palette of colours from which the final image will be constructed. All colours must have the
+        same channel format as a cv2.Mat.
+        :param palette_weights: a map from colour names to "weights", which will determine how big of a sphere of
+        influence each colour has.
+
+        :return: the transformed pixel.
+        """
+        # Measure the Euclidean distance to the pixel colour of each colour in the palette:
+        distances = {
+            colour_name: np.linalg.norm(pixel - np.array(colour)) * palette_weights[colour_name]
+            for colour_name, colour in palette.colour_dict.items()
+        }
+
+        # Find the minimum distance:
+        smallest_distance = min(distances.values())
+        # Create a list of all the colour names with this distance:
+        colours_with_smallest_distance = [
+            colour_name for colour_name, distance in distances.items() if distance == smallest_distance
+        ]
+
+        # Choose one of these colours randomly:
+        closest_colour = np.random.choice(colours_with_smallest_distance)
+
+        return palette[closest_colour]
 
     @staticmethod
-    def __validate_weights(palette: Palette, palette_weights: PaletteWeights | None) -> PaletteWeights:
+    def _validate_palette(palette: Palette) -> Palette:
+        """
+        Do input validation for the palette.
+
+        :param palette: a Palette of Colours.
+
+        :return: palette
+        """
+        # Reformat to the same channel format as cv2.Mat has:
+        palette.reformat(CV2_CHANNEL_FORMAT)
+
+        return palette
+
+    @staticmethod
+    def _validate_weights(palette: Palette, palette_weights: PaletteWeights | None) -> PaletteWeights:
         """
         Do input validation for the palette weights.
 
