@@ -86,7 +86,7 @@ def resize_image(
     # If we have a scale, use it to calculate the new width and height:
     current_height, current_width = image.shape[:2]
     if scale is not None:
-        new_height, new_width = scale * current_height, scale * current_width
+        new_height, new_width = round(scale * current_height), round(scale * current_width)
     # Otherwise, figure out the scale from the input width and height:
     else:
         scale = (new_width * new_height) / (current_width * current_height)
