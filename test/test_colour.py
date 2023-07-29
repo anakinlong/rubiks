@@ -30,6 +30,12 @@ class ColourTest(unittest.TestCase):
         """
         self.assertEqual(self.colour.format, ["b", "g", "r"])
 
+    def test_channel_dict(self) -> None:
+        """
+        Test that the channel_dict property returns the expected result.
+        """
+        self.assertEqual(self.colour.channel_dict, {"b": 1, "g": 2, "r": 3})
+
     def test_setitem(self) -> None:
         """
         Test that list[index] = value (__setitem__) works on Colour.

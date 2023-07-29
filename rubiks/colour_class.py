@@ -40,6 +40,7 @@ class Colour(list):
         # Initialise attributes as None then update them:
         self._values = None
         self._format = None
+        self._channel_dict = None
         self.__update(channel_format)
 
     @property
@@ -56,6 +57,13 @@ class Colour(list):
         """
         return self._format
 
+    @property
+    def channel_dict(self):
+        """
+        A dictionary mapping the channel names to their corresponding values.
+        """
+        return self._channel_dict
+
     def __update(self, channel_format: list[str] | None = None) -> None:
         """
         Update various attributes.
@@ -66,9 +74,11 @@ class Colour(list):
         """
         # The channel values as a list:
         self._values = [element for element in self]
-        # The channel format as a list:
+        # The channel format as a list (only need to update this if we are changing the format):
         if channel_format is not None:
             self._format = channel_format
+        # Combined as a dictionary:
+        self._channel_dict = {channel: value for channel, value in zip(self._format, self._values)}
 
     def __setitem__(self, index: int, value: Any) -> None:
         """
