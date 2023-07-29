@@ -3,3 +3,4 @@ Images/*
 Rubiks Images/*
 .vscode
 *.prof
+.coverage
