@@ -4,3 +4,4 @@ Rubiks Images/*
 .vscode
 *.prof
 .coverage
+venv
