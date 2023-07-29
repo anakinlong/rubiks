@@ -1,0 +1,8 @@
+[tool.black]
+line-length = 120
+include = '\.py$'
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error",
+    "ignore::pytest.PytestUnraisableExceptionWarning",
+]
