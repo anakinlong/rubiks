@@ -1,6 +1,6 @@
 import unittest
 
-from rubiks import Colour
+from rubiks.colour_class import Colour
 
 
 class ColourTest(unittest.TestCase):
