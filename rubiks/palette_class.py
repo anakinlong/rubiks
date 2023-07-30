@@ -239,6 +239,26 @@ class PaletteWeights(dict):
         """
         return self._weights_dict
 
+    def validate_against_palette(self, palette: Palette) -> None:
+        """
+        Do input validation for the palette weights against a palette. Checks that they are 1:1 in terms of colours.
+
+        :param palette: a Palette of Colours.
+
+        :return: None
+        """
+        # Check that each colour in the palette has a weight:
+        colours_with_no_weight = [colour_name for colour_name in palette.names if colour_name not in self._names]
+        if colours_with_no_weight:
+            raise ValueError(f"The following colours were not assigned weights:\n{colours_with_no_weight}")
+
+        # Check that only colours from the palette are in the weights:
+        extra_colours = [colour_name for colour_name in self._names if colour_name not in palette.names]
+        if extra_colours:
+            raise ValueError(
+                f"The following colours are not in the palette but were assigned weights:\n{extra_colours}"
+            )
+
     def __update(self) -> None:
         """
         Updates various attributes.
