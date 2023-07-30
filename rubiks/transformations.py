@@ -7,6 +7,7 @@ import numpy as np
 import cv2
 from .palette_class import Palette, PaletteWeights
 from .constants import CV2_CHANNEL_FORMAT
+from .pixel_transformations import recolour_closest_weighted
 
 
 class Transformation(ABC):
@@ -116,23 +117,8 @@ class RecolourClosest(Transformation):
 
         :return: the transformed pixel.
         """
-        # Measure the Euclidean distance to the pixel colour of each colour in the palette:
-        distances = {
-            colour_name: np.linalg.norm(pixel - np.array(colour)) / palette_weights[colour_name]
-            for colour_name, colour in palette.colour_dict.items()
-        }
 
-        # Find the minimum distance:
-        smallest_distance = min(distances.values())
-        # Create a list of all the colour names with this distance:
-        colours_with_smallest_distance = [
-            colour_name for colour_name, distance in distances.items() if distance == smallest_distance
-        ]
-
-        # Choose one of these colours randomly:
-        closest_colour = np.random.choice(colours_with_smallest_distance)
-
-        return palette[closest_colour]
+        return recolour_closest_weighted(pixel, palette, palette_weights)
 
     @staticmethod
     def _validate_palette(palette: Palette) -> Palette:
