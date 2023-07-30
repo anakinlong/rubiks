@@ -219,21 +219,21 @@ class PaletteWeights(dict):
         self.__update()
 
     @property
-    def names(self):
+    def names(self) -> list[str]:
         """
         The list of colour names. Equivalent of dictionary keys.
         """
         return self._names
 
     @property
-    def weights(self):
+    def weights(self) -> list[float | int]:
         """
         The list of weights. Equivalent of dictionary values.
         """
         return self._weights
 
     @property
-    def weights_dict(self):
+    def weights_dict(self) -> dict[str, float | int]:
         """
         The dictionary mapping colour names to weights. Equivalent of dictionary.
         """
