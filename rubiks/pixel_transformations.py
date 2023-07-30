@@ -34,4 +34,4 @@ def recolour_closest_weighted(pixel: np.ndarray, palette: Palette, palette_weigh
     # Choose one of these colours randomly:
     closest_colour = np.random.choice(colours_with_smallest_distance)
 
-    return palette[closest_colour]
+    return np.array(palette[closest_colour])
