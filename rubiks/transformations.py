@@ -148,18 +148,7 @@ class RecolourClosest(Transformation):
         if palette_weights is None:
             palette_weights = PaletteWeights({colour_name: 1 for colour_name in palette.names})
 
-        # Check that each colour in the palette has a weight:
-        colours_with_no_weight = [
-            colour_name for colour_name in palette.names if colour_name not in palette_weights.names
-        ]
-        if colours_with_no_weight:
-            raise ValueError(f"The following colours were not assigned weights:\n{colours_with_no_weight}")
-
-        # Check that only colours from the palette are in the weights:
-        extra_colours = [colour_name for colour_name in palette_weights.names if colour_name not in palette.names]
-        if extra_colours:
-            raise ValueError(
-                f"The following colours are not in the palette but were assigned weights:\n{extra_colours}"
-            )
+        # Check that the palette weights and palette share the same colours:
+        palette_weights.validate_against_palette(palette)
 
         return palette_weights
