@@ -43,21 +43,21 @@ class Colour(list):
         self.__update(channel_format)
 
     @property
-    def values(self):
+    def values(self) -> list[int]:
         """
         The list of colour channel values.
         """
         return self._values
 
     @property
-    def format(self):
+    def format(self) -> list[str]:
         """
         The list of colour channel names.
         """
         return self._format
 
     @property
-    def channel_dict(self):
+    def channel_dict(self) -> dict[str, int]:
         """
         A dictionary mapping the channel names to their corresponding values.
         """
