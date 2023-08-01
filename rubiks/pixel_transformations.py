@@ -3,6 +3,7 @@ Rubiks pixel transformations.
 """
 
 import numpy as np
+from .lib import pixel_to_greyscale
 from .palette_class import Palette, PaletteWeights
 
 
@@ -53,7 +54,7 @@ def recolour_closest_weighted_greyscale(
     :return: the transformed pixel.
     """
     # Measure the Euclidean distance to the greyscale value of each colour in the palette:
-    pixel_greyscale = np.array([0.11, 0.59, 0.3]).dot(pixel)
+    pixel_greyscale = pixel_to_greyscale(pixel)
     distances = {
         colour_name: np.linalg.norm(pixel_greyscale - colour.greyscale) / palette_weights[colour_name]
         for colour_name, colour in palette.colour_dict.items()

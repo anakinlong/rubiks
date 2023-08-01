@@ -3,8 +3,9 @@ Colour class for rubiks images.
 """
 
 from __future__ import annotations
+import numpy as np
 from typing import Any, Iterable
-from .lib import is_permutation, check_type
+from .lib import is_permutation, check_type, pixel_to_greyscale
 
 # Some defaults for Colour:
 DEFAULT_COLOUR_ITERABLE = [0, 0, 0]
@@ -87,8 +88,8 @@ class Colour(list):
         # Combined as a dictionary:
         self._channel_dict = {channel: value for channel, value in zip(self._format, self._values)}
         # Calculate greyscale value:
-        b, g, r = self.channel_value("b"), self.channel_value("g"), self.channel_value("r")
-        self._greyscale = round(0.3 * r + 0.59 * g + 0.11 * b)
+        bgr = np.array([self.channel_value("b"), self.channel_value("g"), self.channel_value("r")])
+        self._greyscale = pixel_to_greyscale(bgr)
 
     def __setitem__(self, index: int, value: Any) -> None:
         """
