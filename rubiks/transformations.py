@@ -7,6 +7,7 @@ import numpy as np
 import cv2
 from .palette_class import Palette, PaletteWeights
 from .constants import CV2_CHANNEL_FORMAT
+from .pixel_transformations import recolour_closest_weighted
 
 
 class Transformation(ABC):
@@ -116,23 +117,8 @@ class RecolourClosest(Transformation):
 
         :return: the transformed pixel.
         """
-        # Measure the Euclidean distance to the pixel colour of each colour in the palette:
-        distances = {
-            colour_name: np.linalg.norm(pixel - np.array(colour)) / palette_weights[colour_name]
-            for colour_name, colour in palette.colour_dict.items()
-        }
 
-        # Find the minimum distance:
-        smallest_distance = min(distances.values())
-        # Create a list of all the colour names with this distance:
-        colours_with_smallest_distance = [
-            colour_name for colour_name, distance in distances.items() if distance == smallest_distance
-        ]
-
-        # Choose one of these colours randomly:
-        closest_colour = np.random.choice(colours_with_smallest_distance)
-
-        return palette[closest_colour]
+        return recolour_closest_weighted(pixel, palette, palette_weights)
 
     @staticmethod
     def _validate_palette(palette: Palette) -> Palette:
@@ -162,18 +148,7 @@ class RecolourClosest(Transformation):
         if palette_weights is None:
             palette_weights = PaletteWeights({colour_name: 1 for colour_name in palette.names})
 
-        # Check that each colour in the palette has a weight:
-        colours_with_no_weight = [
-            colour_name for colour_name in palette.names if colour_name not in palette_weights.names
-        ]
-        if colours_with_no_weight:
-            raise ValueError(f"The following colours were not assigned weights:\n{colours_with_no_weight}")
-
-        # Check that only colours from the palette are in the weights:
-        extra_colours = [colour_name for colour_name in palette_weights.names if colour_name not in palette.names]
-        if extra_colours:
-            raise ValueError(
-                f"The following colours are not in the palette but were assigned weights:\n{extra_colours}"
-            )
+        # Check that the palette weights and palette share the same colours:
+        palette_weights.validate_against_palette(palette)
 
         return palette_weights

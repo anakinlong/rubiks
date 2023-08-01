@@ -2,6 +2,7 @@ import unittest
 
 from rubiks.colour_class import Colour
 from rubiks.palette_class import Palette, PaletteWeights, DEFAULT_COLOUR_DICT
+from rubiks.constants import RUBIKS_PALETTE
 
 
 class PaletteTest(unittest.TestCase):
@@ -157,7 +158,7 @@ class PaletteWeightsTest(unittest.TestCase):
 
     def test_setitem(self) -> None:
         """
-        Test that dict[key] = value (__setitem__) works on Palette.
+        Test that dict[key] = value (__setitem__) works on PaletteWeights.
         """
         self.rubiks_palette_weights["green"] = 15
         equivalent_palette_weights = PaletteWeights(
@@ -171,3 +172,53 @@ class PaletteWeightsTest(unittest.TestCase):
             }
         )
         self.assertEqual(self.rubiks_palette_weights, equivalent_palette_weights)
+
+    def test_validate_against_palette(self) -> None:
+        """
+        Test that the validate_against_palette method does not raise an error when validating against a valid Palette.
+        """
+        weights = PaletteWeights(
+            {
+                "green": 15,
+                "white": 2,
+                "red": 3,
+                "yellow": 4.5,
+                "blue": 5,
+                "orange": 6,
+            }
+        )
+        weights.validate_against_palette(RUBIKS_PALETTE)
+
+    def test_validate_against_palette_colour_with_no_weight(self) -> None:
+        """
+        Test that the validate_against_palette method raises a ValueError when validating against an invalid Palette.
+        """
+        weights = PaletteWeights(
+            {
+                "green": 15,
+                "white": 2,
+                "red": 3,
+                "yellow": 4.5,
+                "blue": 5,
+            }
+        )
+        with self.assertRaises(ValueError):
+            weights.validate_against_palette(RUBIKS_PALETTE)
+
+    def test_validate_against_palette_extra_colour(self) -> None:
+        """
+        Test that the validate_against_palette method raises a ValueError when validating against an invalid Palette.
+        """
+        weights = PaletteWeights(
+            {
+                "green": 15,
+                "white": 2,
+                "red": 3,
+                "yellow": 4.5,
+                "blue": 5,
+                "orange": 6,
+                "orange2": 6,
+            }
+        )
+        with self.assertRaises(ValueError):
+            weights.validate_against_palette(RUBIKS_PALETTE)
