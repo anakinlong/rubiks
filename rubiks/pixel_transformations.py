@@ -45,7 +45,8 @@ def recolour_closest_weighted_greyscale(
     greyscale values.
 
     :param pixel: a pixel.
-    :param palette: a palette of colours from which the final image will be constructed.
+    :param palette: a palette of colours from which the final image will be constructed. All colours must have the
+    same channel format as a cv2.Mat.
     :param palette_weights: a map from colour names to "weights", which will determine how big of a sphere of
     influence each colour has.
 
