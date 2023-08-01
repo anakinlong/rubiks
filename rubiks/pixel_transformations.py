@@ -56,7 +56,7 @@ def recolour_closest_weighted_greyscale(
     # Measure the Euclidean distance to the greyscale value of each colour in the palette:
     pixel_greyscale = pixel_to_greyscale(pixel)
     distances = {
-        colour_name: np.linalg.norm(pixel_greyscale - colour.greyscale) / palette_weights[colour_name]
+        colour_name: abs(pixel_greyscale - colour.greyscale) / palette_weights[colour_name]
         for colour_name, colour in palette.colour_dict.items()
     }
 
