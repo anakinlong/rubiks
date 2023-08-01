@@ -2,6 +2,7 @@
 Random useful internal functions.
 """
 
+import numpy as np
 from typing import Any, Iterable
 
 
@@ -36,3 +37,15 @@ def check_type(object: object, types: type | Iterable[type], name: str | None = 
         if name is None:
             name = "<this object>"
         raise TypeError(f"{type(object)} is an invalid type for {name} ({object}). Must be from {types}.")
+
+
+def pixel_to_greyscale(pixel: np.ndarray) -> int:
+    """
+    Convert a pixel with BGR colour channel format to an integer greyscale value.
+
+    :param pixel: a 1x3 np.array with integer colour channel values with BGR format.
+
+    :return: the greyscale value of the pixel
+    """
+
+    return round(pixel.dot([0.11, 0.59, 0.3]))
