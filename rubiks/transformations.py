@@ -120,8 +120,8 @@ class RecolourClosest(Transformation):
 
         return recolour_closest_weighted(pixel, palette, palette_weights)
 
-    @classmethod
-    def _validate_palette(cls, palette: Palette) -> Palette:
+    @staticmethod
+    def _validate_palette(palette: Palette) -> Palette:
         """
         Do input validation for the palette.
 
@@ -134,8 +134,8 @@ class RecolourClosest(Transformation):
 
         return palette
 
-    @classmethod
-    def _validate_weights(cls, palette: Palette, palette_weights: PaletteWeights | None) -> PaletteWeights:
+    @staticmethod
+    def _validate_weights(palette: Palette, palette_weights: PaletteWeights | None) -> PaletteWeights:
         """
         Do input validation for the palette weights.
 
