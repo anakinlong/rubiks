@@ -7,7 +7,7 @@ import numpy as np
 import cv2
 from .palette_class import Palette, PaletteWeights
 from .constants import CV2_CHANNEL_FORMAT
-from .pixel_transformations import recolour_closest_weighted
+from .pixel_transformations import recolour_closest_weighted, recolour_closest_weighted_greyscale
 
 
 class Transformation(ABC):
@@ -152,3 +152,26 @@ class RecolourClosest(Transformation):
         palette_weights.validate_against_palette(palette)
 
         return palette_weights
+
+
+class RecolourClosestGreyscale(RecolourClosest):
+    """
+    Recolour each pixel to the colour in the palette that is closest geometrically when converted to greyscale.
+    """
+
+    @classmethod
+    def _transform_pixel(cls, pixel: np.ndarray, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
+        """
+        Change the colour of the pixel to the one from the palette which is geometrically closest when converted to
+        greyscale.
+
+        :param pixel: a pixel.
+        :param palette: a palette of colours from which the final image will be constructed. All colours must have the
+        same channel format as a cv2.Mat.
+        :param palette_weights: a map from colour names to "weights", which will determine how big of a sphere of
+        influence each colour has.
+
+        :return: the transformed pixel.
+        """
+
+        return recolour_closest_weighted_greyscale(pixel, palette, palette_weights)
