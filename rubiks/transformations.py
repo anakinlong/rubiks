@@ -138,34 +138,10 @@ class TransformationFromPalette(Transformation):
         return palette_weights
 
 
-class RecolourClosest(Transformation):
+class RecolourClosest(TransformationFromPalette):
     """
     Recolour each pixel to the colour in the palette that is closest geometrically.
     """
-
-    @classmethod
-    def transform_image(
-        cls,
-        image: cv2.Mat,
-        palette: Palette,
-        palette_weights: PaletteWeights | None = None,
-    ) -> cv2.Mat:
-        """
-        Recolour each pixel of an image by chosing the colour in the palette which is geometrically closest.
-
-        :param image: an image in the form of a cv2.Mat.
-        :param palette: a palette of colours from which the final image will be constructed.
-        :param palette_weights: a map from colour names to "weights", which will determine how big of a sphere of
-        influence each colour has. Defaults to all colours having equal weights.
-
-        :return: an image (cv2.Mat) made up of the colours in the given palette.
-        """
-        # Input verification for the palette:
-        palette = cls._validate_palette(palette)
-        # Input verification for the weights (if None, creates equal weight for each colour):
-        palette_weights = cls._validate_weights(palette, palette_weights)
-
-        return cls._apply_to_all_pixels(image, palette, palette_weights)
 
     @classmethod
     def _transform_pixel(cls, pixel: np.ndarray, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
@@ -183,41 +159,8 @@ class RecolourClosest(Transformation):
 
         return recolour_closest_weighted(pixel, palette, palette_weights)
 
-    @staticmethod
-    def _validate_palette(palette: Palette) -> Palette:
-        """
-        Do input validation for the palette.
 
-        :param palette: a Palette of Colours.
-
-        :return: palette
-        """
-        # Reformat to the same channel format as cv2.Mat has:
-        palette.reformat(CV2_CHANNEL_FORMAT)
-
-        return palette
-
-    @staticmethod
-    def _validate_weights(palette: Palette, palette_weights: PaletteWeights | None) -> PaletteWeights:
-        """
-        Do input validation for the palette weights.
-
-        :param palette: a Palette of Colours.
-        :param pallete_weights: a PaletteWeights instance.
-
-        :return: palette_weights
-        """
-        # If we haven't been given any weights, assign each colour a weight of 1:
-        if palette_weights is None:
-            palette_weights = PaletteWeights({colour_name: 1 for colour_name in palette.names})
-
-        # Check that the palette weights and palette share the same colours:
-        palette_weights.validate_against_palette(palette)
-
-        return palette_weights
-
-
-class RecolourClosestGreyscale(RecolourClosest):
+class RecolourClosestGreyscale(TransformationFromPalette):
     """
     Recolour each pixel to the colour in the palette that is closest geometrically when converted to greyscale.
     """
