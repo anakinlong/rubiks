@@ -15,7 +15,7 @@ cv2.waitKey(0)
 # # Estimate the best dimensions for the final image:
 # (new_height, new_width) = rubiks.rubiks_dimension_estimator(regular_image, n_cubes, reporting=True)
 n_cubes = 400
-new_height, new_width = rubiks.rubiks_dimension_estimator(n_cubes, image=regular_image)
+new_width, new_height = rubiks.rubiks_dimension_estimator(n_cubes, image=regular_image)
 print((new_height, new_width))
 
 # # Resize the image:
