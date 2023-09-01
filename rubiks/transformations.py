@@ -75,9 +75,9 @@ class NoneTransformation(Transformation):
         return pixel
 
 
-class RecolourClosest(Transformation):
+class TransformationFromPalette(Transformation):
     """
-    Recolour each pixel to the colour in the palette that is closest geometrically.
+    A transformation which takes a palette (and weights) as inputs.
     """
 
     @classmethod
@@ -88,7 +88,7 @@ class RecolourClosest(Transformation):
         palette_weights: PaletteWeights | None = None,
     ) -> cv2.Mat:
         """
-        Recolour each pixel of an image by chosing the colour in the palette which is geometrically closest.
+        Recolour each pixel of an image using a palette and palette weights.
 
         :param image: an image in the form of a cv2.Mat.
         :param palette: a palette of colours from which the final image will be constructed.
@@ -103,22 +103,6 @@ class RecolourClosest(Transformation):
         palette_weights = cls._validate_weights(palette, palette_weights)
 
         return cls._apply_to_all_pixels(image, palette, palette_weights)
-
-    @classmethod
-    def _transform_pixel(cls, pixel: np.ndarray, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
-        """
-        Change the colour of the pixel to the one from the palette which is geometrically closest.
-
-        :param pixel: a pixel.
-        :param palette: a palette of colours from which the final image will be constructed. All colours must have the
-        same channel format as a cv2.Mat.
-        :param palette_weights: a map from colour names to "weights", which will determine how big of a sphere of
-        influence each colour has.
-
-        :return: the transformed pixel.
-        """
-
-        return recolour_closest_weighted(pixel, palette, palette_weights)
 
     @staticmethod
     def _validate_palette(palette: Palette) -> Palette:
@@ -154,7 +138,29 @@ class RecolourClosest(Transformation):
         return palette_weights
 
 
-class RecolourClosestGreyscale(RecolourClosest):
+class RecolourClosest(TransformationFromPalette):
+    """
+    Recolour each pixel to the colour in the palette that is closest geometrically.
+    """
+
+    @classmethod
+    def _transform_pixel(cls, pixel: np.ndarray, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
+        """
+        Change the colour of the pixel to the one from the palette which is geometrically closest.
+
+        :param pixel: a pixel.
+        :param palette: a palette of colours from which the final image will be constructed. All colours must have the
+        same channel format as a cv2.Mat.
+        :param palette_weights: a map from colour names to "weights", which will determine how big of a sphere of
+        influence each colour has.
+
+        :return: the transformed pixel.
+        """
+
+        return recolour_closest_weighted(pixel, palette, palette_weights)
+
+
+class RecolourClosestGreyscale(TransformationFromPalette):
     """
     Recolour each pixel to the colour in the palette that is closest geometrically when converted to greyscale.
     """
