@@ -17,7 +17,7 @@ class Pixel(np.ndarray):
         """
         A pixel :^). This is basically a numpy.ndarray with a few extra features.
 
-        :param iterable: an iterable with length three containing positive integer elements.
+        :param array: an iterable with length three containing positive integer elements.
         :param coordinates: an iterable with length three containing positive integer elements.
         """
         # np.ndarrays are weird to subclass. See https://numpy.org/doc/stable/user/basics.subclassing.html
