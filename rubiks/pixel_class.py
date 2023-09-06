@@ -1,5 +1,5 @@
 """
-Colour class for rubiks images.
+Pixel class for rubiks images.
 """
 
 import numpy as np
