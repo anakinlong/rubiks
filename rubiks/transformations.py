@@ -7,6 +7,7 @@ import numpy as np
 import cv2
 from .palette_class import Palette, PaletteWeights
 from .constants import CV2_CHANNEL_FORMAT
+from .pixel_class import Pixel
 from .pixel_transformations import recolour_closest_weighted, recolour_closest_weighted_greyscale
 
 
@@ -57,7 +58,7 @@ class Transformation(ABC):
         for x in range(width):
             for y in range(height):
                 # Find the current pixel:
-                original_pixel = image[y, x]
+                original_pixel = Pixel(image[y, x])
                 # Transform it:
                 transformed_image[y, x] = cls._transform_pixel(original_pixel, *args, **kwargs)
 
