@@ -5,9 +5,10 @@ Rubiks pixel transformations.
 import numpy as np
 from .lib import pixel_to_greyscale
 from .palette_class import Palette, PaletteWeights
+from .pixel_class import Pixel
 
 
-def recolour_closest_weighted(pixel: np.ndarray, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
+def recolour_closest_weighted(pixel: Pixel, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
     """
     Change the colour of the pixel to the one from the palette which is geometrically closest.
 
@@ -38,9 +39,7 @@ def recolour_closest_weighted(pixel: np.ndarray, palette: Palette, palette_weigh
     return np.array(palette[closest_colour])
 
 
-def recolour_closest_weighted_greyscale(
-    pixel: np.ndarray, palette: Palette, palette_weights: PaletteWeights
-) -> np.ndarray:
+def recolour_closest_weighted_greyscale(pixel: Pixel, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
     """
     Change the colour of the pixel to the one from the palette which is geometrically closest when comparing their
     greyscale values.

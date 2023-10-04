@@ -7,6 +7,7 @@ import numpy as np
 import cv2
 from .palette_class import Palette, PaletteWeights
 from .constants import CV2_CHANNEL_FORMAT
+from .pixel_class import Pixel
 from .pixel_transformations import recolour_closest_weighted, recolour_closest_weighted_greyscale
 
 
@@ -28,7 +29,7 @@ class Transformation(ABC):
 
     @classmethod
     @abstractmethod
-    def _transform_pixel(cls, pixel: np.ndarray, *args, **kwargs) -> np.ndarray:
+    def _transform_pixel(cls, pixel: Pixel, *args, **kwargs) -> np.ndarray:
         """
         Main transform method for a pixel. Must be implemented by child classes.
 
@@ -57,7 +58,7 @@ class Transformation(ABC):
         for x in range(width):
             for y in range(height):
                 # Find the current pixel:
-                original_pixel = image[y, x]
+                original_pixel = Pixel(image[y, x])
                 # Transform it:
                 transformed_image[y, x] = cls._transform_pixel(original_pixel, *args, **kwargs)
 
@@ -70,7 +71,7 @@ class NoneTransformation(Transformation):
     """
 
     @classmethod
-    def _transform_pixel(cls, pixel: np.ndarray, *args, **kwargs) -> np.ndarray:
+    def _transform_pixel(cls, pixel: Pixel, *args, **kwargs) -> np.ndarray:
 
         return pixel
 
@@ -144,7 +145,7 @@ class RecolourClosest(TransformationFromPalette):
     """
 
     @classmethod
-    def _transform_pixel(cls, pixel: np.ndarray, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
+    def _transform_pixel(cls, pixel: Pixel, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
         """
         Change the colour of the pixel to the one from the palette which is geometrically closest.
 
@@ -166,7 +167,7 @@ class RecolourClosestGreyscale(TransformationFromPalette):
     """
 
     @classmethod
-    def _transform_pixel(cls, pixel: np.ndarray, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
+    def _transform_pixel(cls, pixel: Pixel, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
         """
         Change the colour of the pixel to the one from the palette which is geometrically closest when converted to
         greyscale.
