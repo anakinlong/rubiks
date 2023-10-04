@@ -29,7 +29,7 @@ class Transformation(ABC):
 
     @classmethod
     @abstractmethod
-    def _transform_pixel(cls, pixel: np.ndarray, *args, **kwargs) -> np.ndarray:
+    def _transform_pixel(cls, pixel: Pixel, *args, **kwargs) -> np.ndarray:
         """
         Main transform method for a pixel. Must be implemented by child classes.
 
@@ -71,7 +71,7 @@ class NoneTransformation(Transformation):
     """
 
     @classmethod
-    def _transform_pixel(cls, pixel: np.ndarray, *args, **kwargs) -> np.ndarray:
+    def _transform_pixel(cls, pixel: Pixel, *args, **kwargs) -> np.ndarray:
 
         return pixel
 
@@ -145,7 +145,7 @@ class RecolourClosest(TransformationFromPalette):
     """
 
     @classmethod
-    def _transform_pixel(cls, pixel: np.ndarray, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
+    def _transform_pixel(cls, pixel: Pixel, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
         """
         Change the colour of the pixel to the one from the palette which is geometrically closest.
 
@@ -167,7 +167,7 @@ class RecolourClosestGreyscale(TransformationFromPalette):
     """
 
     @classmethod
-    def _transform_pixel(cls, pixel: np.ndarray, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
+    def _transform_pixel(cls, pixel: Pixel, palette: Palette, palette_weights: PaletteWeights) -> np.ndarray:
         """
         Change the colour of the pixel to the one from the palette which is geometrically closest when converted to
         greyscale.
