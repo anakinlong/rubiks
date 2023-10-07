@@ -118,7 +118,7 @@ class PaletteTest(unittest.TestCase):
         equivalent_palette = Palette(
             {"white": Colour([255, 255, 255]), "black": Colour([0, 0, 0]), "whiteblack": Colour([128, 128, 128])}
         )
-        self.assertEqual(Palette.create_combined_palette(DEFAULT_COLOUR_DICT), equivalent_palette)
+        self.assertEqual(Palette.create_combined_palette_from_colour_dict(DEFAULT_COLOUR_DICT), equivalent_palette)
 
 
 class PaletteWeightsTest(unittest.TestCase):

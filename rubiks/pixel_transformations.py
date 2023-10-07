@@ -4,7 +4,7 @@ Rubiks pixel transformations.
 
 import numpy as np
 from .lib import pixel_to_greyscale
-from .palette_class import Palette, PaletteWeights
+from .palette_class import Palette, CombinedPalette, PaletteWeights
 from .pixel_class import Pixel
 
 
@@ -70,3 +70,17 @@ def recolour_closest_weighted_greyscale(pixel: Pixel, palette: Palette, palette_
     closest_colour = np.random.choice(colours_with_smallest_distance)
 
     return np.array(palette[closest_colour])
+
+
+def recolour_closest_combined(pixel: Pixel, combined_palette: CombinedPalette) -> np.ndarray:
+    """
+    Change the colour of the pixel to the one from the palette which is geometrically closest, also considering
+    combinations of colours. If a combination of two colours is closest, one of those two colours will be chosen based
+    on the position of the pixel within its image.
+
+    :param pixel: a pixel.
+    :param palette: a palette of colours from which the final image will be constructed. All colours must have the
+    same channel format as a cv2.Mat.
+
+    :return: the transformed pixel.
+    """

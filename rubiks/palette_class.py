@@ -105,14 +105,22 @@ class Palette(dict):
         # Update other attributes:
         self.__update()
 
-    @classmethod
-    def create_combined_palette(cls, colour_dict: dict[str, Colour]) -> Palette:
+    def to_combined_palette(self) -> Palette:
         """
-        Create a "combined" palette, where combinations of colours from the colour dict are also included.
+        Create a combined palette using this Palette instance.
+
+        :return: a Palette instance where the colours are combinations of the colours in this Palette.
+        """
+        return Palette.create_combined_palette_from_colour_dict(self.colour_dict)
+
+    @classmethod
+    def create_combined_palette_from_colour_dict(cls, colour_dict: dict[str, Colour]) -> tuple[Palette, Palette]:
+        """
+        Create a "combined" palette, where the colours are combinations of colours from the colour dict.
 
         :param colour_dict: a dictionary mapping string colour names to colours.
 
-        :return: a palette with combinations of colours.
+        :return: a palette with combinations of colours from the original palette.
         """
         # Combine the colour dict:
         combined_colour_dict = Palette.__combine_colour_dict(colour_dict)
@@ -126,7 +134,7 @@ class Palette(dict):
 
         :param colour_dict: a dictionary mapping string colour names to colours.
 
-        :return: a colour dictionary with combinations of the colours.
+        :return: a colour dictionary with combinations of the colours in the input colour dictionary.
         """
         combined_colour_dict = {}
         # Get the colour names:
@@ -154,8 +162,7 @@ class Palette(dict):
                 f"{colour_dict.keys()}"
             )
 
-        # Add these combined colours to the existing colours:
-        return colour_dict | combined_colour_dict
+        return combined_colour_dict
 
     @staticmethod
     def __validate_key_value_pair(key: str, value: Colour) -> None:
@@ -190,9 +197,56 @@ class Palette(dict):
             check_type(v, Colour, "a value in colour_dict")
 
 
-# TODO create a CombinedPalette class. This will be composed of two palettes - the original, and the one with ONLY the
-# colours formed from combinations of the original colours. Will make using it easier. Can also have a method to
-# create one single palette with all those colours together.
+class CombinedPalette:
+    """
+    A regular Palette, as well as another Palette containing the combinations of colours from the first.
+    """
+
+    def __init__(self, palette: Palette, combined_palette: Palette) -> None:
+        """
+        A regular colour palette, as well as another palette containing the combinations of colours from the first.
+
+        :param palette:
+        :param combined_palette:
+        """
+        # Store the palettes:
+        self._palette = palette
+        self._combined_palette = combined_palette
+        # All the colours in one palette:
+        all_colour_dict = palette.colour_dict | combined_palette.colour_dict
+        self._all_colours_palette = Palette(all_colour_dict)
+
+    @property
+    def palette(self) -> Palette:
+        """
+        The regular palette of colours.
+        """
+        return self._palette
+
+    @property
+    def combined_palette(self) -> Palette:
+        """
+        The palette of combinations of colours from the regular palette.
+        """
+        return self._combined_palette
+
+    @property
+    def all_colours_palette(self) -> Palette:
+        """
+        The palette containing the colours from both the original palette and the combined palette.
+        """
+        return self._all_colours_palette
+
+    @classmethod
+    def from_palette(cls, palette: Palette) -> CombinedPalette:
+        """
+        Create an instance from a palette.
+
+        :param palette: a palette of colours.
+
+        :returns: a combined palette instance.
+        """
+        return cls(palette, palette.to_combined_palette())
 
 
 class PaletteWeights(dict):
