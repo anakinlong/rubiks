@@ -8,7 +8,7 @@ import cv2
 from .palette_class import Palette, PaletteWeights
 from .constants import CV2_CHANNEL_FORMAT
 from .pixel_class import Pixel
-from .pixel_transformations import recolour_closest_weighted, recolour_closest_weighted_greyscale
+from .pixel_transformations import recolour_closest, recolour_closest_greyscale
 
 
 class Transformation(ABC):
@@ -158,7 +158,7 @@ class RecolourClosest(TransformationFromPalette):
         :return: the transformed pixel.
         """
 
-        return recolour_closest_weighted(pixel, palette, palette_weights)
+        return recolour_closest(pixel, palette, palette_weights)
 
 
 class RecolourClosestGreyscale(TransformationFromPalette):
@@ -181,4 +181,4 @@ class RecolourClosestGreyscale(TransformationFromPalette):
         :return: the transformed pixel.
         """
 
-        return recolour_closest_weighted_greyscale(pixel, palette, palette_weights)
+        return recolour_closest_greyscale(pixel, palette, palette_weights)

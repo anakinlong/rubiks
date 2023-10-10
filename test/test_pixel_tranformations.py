@@ -3,12 +3,12 @@ import unittest
 
 from rubiks.constants import RUBIKS_PALETTE
 from rubiks.palette_class import PaletteWeights
-from rubiks.pixel_transformations import recolour_closest_weighted, recolour_closest_weighted_greyscale
+from rubiks.pixel_transformations import recolour_closest, recolour_closest_greyscale
 
 
-class RecolourClosestWeightedTest(unittest.TestCase):
+class RecolourClosestTest(unittest.TestCase):
     """
-    Test the recolour_closest_weighted function.
+    Test the recolour_closest function.
     """
 
     def setUp(self) -> None:
@@ -22,13 +22,13 @@ class RecolourClosestWeightedTest(unittest.TestCase):
         Test that recolouring a pixel returns the expected colour.
         """
         np.testing.assert_array_equal(
-            recolour_closest_weighted(self.pixel, self.palette, self.weights), np.array([255, 255, 255])
+            recolour_closest(self.pixel, self.palette, self.weights), np.array([255, 255, 255])
         )
 
 
-class RecolourClosestWeightedGreyscaleTest(unittest.TestCase):
+class RecolourClosestGreyscaleTest(unittest.TestCase):
     """
-    Test the recolour_closest_weighted_greyscale function.
+    Test the recolour_closest_greyscale function.
     """
 
     def setUp(self) -> None:
@@ -42,5 +42,5 @@ class RecolourClosestWeightedGreyscaleTest(unittest.TestCase):
         Test that recolouring a pixel returns the expected colour.
         """
         np.testing.assert_array_equal(
-            recolour_closest_weighted_greyscale(self.pixel, self.palette, self.weights), np.array([0, 213, 255])
+            recolour_closest_greyscale(self.pixel, self.palette, self.weights), np.array([0, 213, 255])
         )
