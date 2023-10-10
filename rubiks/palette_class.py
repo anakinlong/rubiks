@@ -174,7 +174,7 @@ class CombinedPalette:
                 # Get the two names:
                 name_1, name_2 = names[i], names[j]
                 # Combine the names:
-                new_name = [name_1, name_2]
+                new_name = (name_1, name_2)
                 # Combine those two colours:
                 new_colour = Colour.colour_average(colour_dict[name_1], colour_dict[name_2])
                 # Put them in the combined colour dictionary:

@@ -1,7 +1,7 @@
 import unittest
 
 from rubiks.colour_class import Colour
-from rubiks.palette_class import Palette, PaletteWeights, DEFAULT_COLOUR_DICT
+from rubiks.palette_class import Palette, CombinedPalette, PaletteWeights, DEFAULT_COLOUR_DICT
 from rubiks.constants import RUBIKS_PALETTE
 
 
@@ -93,11 +93,11 @@ class PaletteTest(unittest.TestCase):
         Test that the __combine_colour_dict method produces the expected result.
         """
         equivalent_colour_dict = {
-            "white": Colour([255, 255, 255]),
-            "black": Colour([0, 0, 0]),
-            "whiteblack": Colour([128, 128, 128]),
+            ("white", "black"): Colour([128, 128, 128]),
         }
-        self.assertEqual(Palette._Palette__combine_colour_dict(DEFAULT_COLOUR_DICT), equivalent_colour_dict)
+        self.assertEqual(
+            CombinedPalette._CombinedPalette__combine_colour_dict(DEFAULT_COLOUR_DICT), equivalent_colour_dict
+        )
 
     def test_combine_colour_dict_duplicate_keys(self) -> None:
         """
@@ -107,18 +107,16 @@ class PaletteTest(unittest.TestCase):
             weird_colour_dict = {
                 "a": Colour(),
                 "b": Colour(),
-                "ab": Colour(),
+                ("a", "b"): Colour(),
             }
-            Palette._Palette__combine_colour_dict(weird_colour_dict)
+            CombinedPalette._CombinedPalette__combine_colour_dict(weird_colour_dict)
 
     def test_create_combined_palette(self) -> None:
         """
-        Test that the create_combined_palette method produces the expected result.
+        Test that the CombinedPalette class produces the expected result.
         """
-        equivalent_palette = Palette(
-            {"white": Colour([255, 255, 255]), "black": Colour([0, 0, 0]), "whiteblack": Colour([128, 128, 128])}
-        )
-        self.assertEqual(Palette.create_combined_palette_from_colour_dict(DEFAULT_COLOUR_DICT), equivalent_palette)
+        equivalent_palette = Palette({("white", "black"): Colour([128, 128, 128])})
+        self.assertEqual(CombinedPalette(Palette(DEFAULT_COLOUR_DICT)), equivalent_palette)
 
 
 class PaletteWeightsTest(unittest.TestCase):
