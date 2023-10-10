@@ -23,7 +23,7 @@ def rubiks_dimension_estimator(
     :param height: the height of the input image in pixels.
     :param image: a cv2.Mat.
 
-    :return: output_dimensions the dimensions of the resulting rubiks image (in rubiks tiles).
+    :return: the dimensions of the resulting rubiks image (in rubiks tiles) in the format (width, height).
     """
     # Verify inputs:
     # Check that we either have both width and height and NOT image, or have image and NEITHER of width and height:
