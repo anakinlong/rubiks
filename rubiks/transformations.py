@@ -58,7 +58,7 @@ class Transformation(ABC):
         for x in range(width):
             for y in range(height):
                 # Find the current pixel:
-                original_pixel = Pixel(image[y, x])
+                original_pixel = Pixel(image[y, x], coordinates=(x, y))
                 # Transform it:
                 transformed_image[y, x] = cls._transform_pixel(original_pixel, *args, **kwargs)
 
