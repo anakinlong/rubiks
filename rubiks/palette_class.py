@@ -3,6 +3,7 @@ Palette class for rubiks images.
 """
 
 from __future__ import annotations
+from typing import Any
 from .colour_class import Colour
 from .lib import check_type
 
@@ -18,7 +19,7 @@ class Palette(dict):
     A colour palette :^). Basically a dictionary.
     """
 
-    def __init__(self, colour_dict: dict[str, Colour] | None = None) -> None:
+    def __init__(self, colour_dict: dict[Any, Colour] | None = None) -> None:
         """
         A colour palette :^). Basically a dictionary. Maps colour names to Colours.
 
@@ -41,7 +42,7 @@ class Palette(dict):
         self.__update()
 
     @property
-    def names(self) -> list[str]:
+    def names(self) -> list[Any]:
         """
         The list of colour names. Equivalent of dictionary keys.
         """
@@ -55,7 +56,7 @@ class Palette(dict):
         return self._colours
 
     @property
-    def colour_dict(self) -> dict[str, Colour]:
+    def colour_dict(self) -> dict[Any, Colour]:
         """
         The dictionary mapping colour names to colours. Equivalent of dictionary.
         """
@@ -73,11 +74,11 @@ class Palette(dict):
         # Combined as a dictionary:
         self._colour_dict = dict(zip(self._names, self._colours))
 
-    def __setitem__(self, key: str, value: Colour) -> None:
+    def __setitem__(self, key: Any, value: Colour) -> None:
         """
         Set self[key] to value.
 
-        :param key: a string key.
+        :param key: a key.
         :param value: a Colour value.
 
         :return: None
@@ -105,34 +106,60 @@ class Palette(dict):
         # Update other attributes:
         self.__update()
 
-    def to_combined_palette(self) -> Palette:
+    @staticmethod
+    def __validate_key_value_pair(key: Any, value: Colour) -> None:
         """
-        Create a combined palette using this Palette instance.
+        Check the given key, value pair is acceptable.
 
-        :return: a Palette instance where the colours are combinations of the colours in this Palette.
+        :param key: a key.
+        :param value: a Colour value.
+
+        :return: None
         """
-        return Palette.create_combined_palette_from_colour_dict(self.colour_dict)
-
-    @classmethod
-    def create_combined_palette_from_colour_dict(cls, colour_dict: dict[str, Colour]) -> tuple[Palette, Palette]:
-        """
-        Create a "combined" palette, where the colours are combinations of colours from the colour dict.
-
-        :param colour_dict: a dictionary mapping string colour names to colours.
-
-        :return: a palette with combinations of colours from the original palette.
-        """
-        # Combine the colour dict:
-        combined_colour_dict = Palette.__combine_colour_dict(colour_dict)
-
-        return cls(combined_colour_dict)
+        # Check the value is the correct type:
+        check_type(value, Colour, "a value")
 
     @staticmethod
-    def __combine_colour_dict(colour_dict: dict[str, Colour]) -> dict[str, Colour]:
+    def __validate_colour_dict(colour_dict: dict[Any, Colour]) -> None:
+        """
+        Check the given colour dict is acceptable.
+
+        :param colour_dict: a dictionary mapping names to colours.
+
+        :return: None
+        """
+        # Check colour dict is a dictionary:
+        check_type(colour_dict, dict, "colour_dict")
+        # Check that all the values of the colour dict are Colours:
+        for v in colour_dict.values():
+            check_type(v, Colour, "a value in colour_dict")
+
+
+class CombinedPalette:
+    """
+    A palette where each colour is a combination of two colours from a different palette. Does not include the original
+    colours themselves.
+    """
+
+    def __new__(cls, palette: Palette) -> Palette:
+        """
+        Create a new combined palette. Returns an instance of Palette.
+
+        :param palette: the original palette of colours.
+
+        :return: a new palette with colours resulting from combinations of two colours from the original palette.
+        """
+        # Combine the colour dict:
+        combined_colour_dict = CombinedPalette.__combine_colour_dict(palette.colour_dict)
+
+        return Palette(combined_colour_dict)
+
+    @staticmethod
+    def __combine_colour_dict(colour_dict: dict[Any, Colour]) -> dict[list[Any], Colour]:
         """
         Create a "combined" colour dict, where combinations of colours from the colour dict are also included.
 
-        :param colour_dict: a dictionary mapping string colour names to colours.
+        :param colour_dict: a dictionary mapping colour names to colours.
 
         :return: a colour dictionary with combinations of the colours in the input colour dictionary.
         """
@@ -147,7 +174,7 @@ class Palette(dict):
                 # Get the two names:
                 name_1, name_2 = names[i], names[j]
                 # Combine the names:
-                new_name = name_1 + name_2
+                new_name = [name_1, name_2]
                 # Combine those two colours:
                 new_colour = Colour.colour_average(colour_dict[name_1], colour_dict[name_2])
                 # Put them in the combined colour dictionary:
@@ -164,45 +191,13 @@ class Palette(dict):
 
         return combined_colour_dict
 
-    @staticmethod
-    def __validate_key_value_pair(key: str, value: Colour) -> None:
-        """
-        Check the given key, value pair is acceptable.
-
-        :param key: a string key.
-        :param value: a Colour value.
-
-        :return: None
-        """
-        # Check they are the correct types:
-        check_type(key, str, "a key")
-        check_type(value, Colour, "a value")
-
-    @staticmethod
-    def __validate_colour_dict(colour_dict: dict[str, Colour]) -> None:
-        """
-        Check the given colour dict is acceptable.
-
-        :param colour_dict: a dictionary mapping names to colours.
-
-        :return: None
-        """
-        # Check colour dict is a dictionary:
-        check_type(colour_dict, dict, "colour_dict")
-        # Check that the keys of the colour dict are strings:
-        for k in colour_dict.keys():
-            check_type(k, str, "a key in colour_dict")
-        # Check that all the values of the colour dict are Colours:
-        for v in colour_dict.values():
-            check_type(v, Colour, "a value in colour_dict")
-
 
 class PaletteWeights(dict):
     """
     Colour weights. Basically a dictionary.
     """
 
-    def __init__(self, weights_dict: dict[str, float | int]) -> None:
+    def __init__(self, weights_dict: dict[Any, float | int]) -> None:
         """
         Palette weights. Basically a dictionary.
 
@@ -221,7 +216,7 @@ class PaletteWeights(dict):
         self.__update()
 
     @property
-    def names(self) -> list[str]:
+    def names(self) -> list[Any]:
         """
         The list of colour names. Equivalent of dictionary keys.
         """
@@ -235,7 +230,7 @@ class PaletteWeights(dict):
         return self._weights
 
     @property
-    def weights_dict(self) -> dict[str, float | int]:
+    def weights_dict(self) -> dict[Any, float | int]:
         """
         The dictionary mapping colour names to weights. Equivalent of dictionary.
         """
@@ -273,11 +268,11 @@ class PaletteWeights(dict):
         # Combined as a dictionary:
         self._weights_dict = dict(zip(self._names, self._weights))
 
-    def __setitem__(self, key: str, value: Colour) -> None:
+    def __setitem__(self, key: Any, value: Colour) -> None:
         """
         Set self[key] to value.
 
-        :param key: a string key.
+        :param key: a key.
         :param value: a float or int value.
 
         :return: None
@@ -292,21 +287,20 @@ class PaletteWeights(dict):
         self.__update()
 
     @staticmethod
-    def __validate_key_value_pair(key: str, value: float | int) -> None:
+    def __validate_key_value_pair(key: Any, value: float | int) -> None:
         """
         Check the given key, value pair is acceptable.
 
-        :param key: a string key.
+        :param key: a key.
         :param value: a float or int value.
 
         :return: None
         """
-        # Check they are the correct types:
-        check_type(key, str, "a key")
+        # Check the values are of the correct types:
         check_type(value, [float, int], "a value")
 
     @staticmethod
-    def __validate_weights_dict(weights_dict: dict[str, float | int]) -> None:
+    def __validate_weights_dict(weights_dict: dict[Any, float | int]) -> None:
         """
         Check the given weights dict is acceptable.
 
@@ -316,9 +310,6 @@ class PaletteWeights(dict):
         """
         # Check weights dict is a dictionary:
         check_type(weights_dict, dict, "weights_dict")
-        # Check that the keys of the weights dict are strings:
-        for k in weights_dict.keys():
-            check_type(k, str, "a key in weights_dict")
         # Check that all the values of the weights dict are floats or ints:
         for v in weights_dict.values():
             check_type(v, [float, int], "a value in weights_dict")

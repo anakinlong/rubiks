@@ -72,7 +72,7 @@ def recolour_closest_weighted_greyscale(pixel: Pixel, palette: Palette, palette_
     return np.array(palette[closest_colour])
 
 
-def recolour_closest_combined(pixel: Pixel, combined_palette: CombinedPalette) -> np.ndarray:
+def recolour_closest_combined(pixel: Pixel, palette: Palette) -> np.ndarray:
     """
     Change the colour of the pixel to the one from the palette which is geometrically closest, also considering
     combinations of colours. If a combination of two colours is closest, one of those two colours will be chosen based
@@ -84,3 +84,4 @@ def recolour_closest_combined(pixel: Pixel, combined_palette: CombinedPalette) -
 
     :return: the transformed pixel.
     """
+    raise NotImplementedError
