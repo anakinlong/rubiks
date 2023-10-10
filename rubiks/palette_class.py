@@ -197,58 +197,6 @@ class Palette(dict):
             check_type(v, Colour, "a value in colour_dict")
 
 
-class CombinedPalette:
-    """
-    A regular Palette, as well as another Palette containing the combinations of colours from the first.
-    """
-
-    def __init__(self, palette: Palette, combined_palette: Palette) -> None:
-        """
-        A regular colour palette, as well as another palette containing the combinations of colours from the first.
-
-        :param palette:
-        :param combined_palette:
-        """
-        # Store the palettes:
-        self._palette = palette
-        self._combined_palette = combined_palette
-        # All the colours in one palette:
-        all_colour_dict = palette.colour_dict | combined_palette.colour_dict
-        self._all_colours_palette = Palette(all_colour_dict)
-
-    @property
-    def palette(self) -> Palette:
-        """
-        The regular palette of colours.
-        """
-        return self._palette
-
-    @property
-    def combined_palette(self) -> Palette:
-        """
-        The palette of combinations of colours from the regular palette.
-        """
-        return self._combined_palette
-
-    @property
-    def all_colours_palette(self) -> Palette:
-        """
-        The palette containing the colours from both the original palette and the combined palette.
-        """
-        return self._all_colours_palette
-
-    @classmethod
-    def from_palette(cls, palette: Palette) -> CombinedPalette:
-        """
-        Create an instance from a palette.
-
-        :param palette: a palette of colours.
-
-        :returns: a combined palette instance.
-        """
-        return cls(palette, palette.to_combined_palette())
-
-
 class PaletteWeights(dict):
     """
     Colour weights. Basically a dictionary.
