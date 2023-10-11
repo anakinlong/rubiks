@@ -195,6 +195,7 @@ class TransformationFromCombinedPalette(Transformation):
         image: cv2.Mat,
         palette: Palette,
         palette_weights: PaletteWeights | None = None,
+        combined_weight: float | None = None,
     ) -> cv2.Mat:
         """
         Recolour each pixel of an image using a palette and palette weights.
@@ -203,6 +204,7 @@ class TransformationFromCombinedPalette(Transformation):
         :param palette: a palette of colours from which the final image will be constructed.
         :param palette_weights: a map from colour names to "weights", which will determine how big of a sphere of
         influence each colour has. Defaults to all colours having equal weights.
+        :param combined_weight: a modifier for the palette weights of the combined palette compared to the original.
 
         :return: an image (cv2.Mat) made up of the colours in the given palette.
         """
@@ -214,6 +216,11 @@ class TransformationFromCombinedPalette(Transformation):
         # Create the combined versions of the palette and weights:
         combined_palette = CombinedPalette(palette)
         combined_palette_weights = CombinedPaletteWeights(palette_weights)
+
+        # Determine the relative influence of the combined palette against the original:
+        if combined_weight is not None:
+            for colour in combined_palette_weights:
+                combined_palette_weights[colour] *= combined_weight
 
         return cls._apply_to_all_pixels(image, palette, palette_weights, combined_palette, combined_palette_weights)
 
