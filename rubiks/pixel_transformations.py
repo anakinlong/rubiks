@@ -4,7 +4,7 @@ Rubiks pixel transformations.
 
 import numpy as np
 from .lib import pixel_to_greyscale
-from .palette_class import Palette, CombinedPalette, PaletteWeights
+from .palette_class import Palette, PaletteWeights
 from .pixel_class import Pixel
 
 
@@ -34,7 +34,7 @@ def recolour_closest(pixel: Pixel, palette: Palette, palette_weights: PaletteWei
     ]
 
     # Choose one of these colours randomly:
-    closest_colour = np.random.choice(colours_with_smallest_distance)
+    closest_colour = colours_with_smallest_distance[0]
 
     return np.array(palette[closest_colour])
 
@@ -67,7 +67,7 @@ def recolour_closest_greyscale(pixel: Pixel, palette: Palette, palette_weights: 
     ]
 
     # Choose one of these colours randomly:
-    closest_colour = np.random.choice(colours_with_smallest_distance)
+    closest_colour = colours_with_smallest_distance[0]
 
     return np.array(palette[closest_colour])
 
@@ -118,7 +118,7 @@ def recolour_closest_combined(
     ]
 
     # Choose one of these colours randomly:
-    closest_colour = np.random.choice(colours_with_smallest_distance)
+    closest_colour = colours_with_smallest_distance[0]  # We want repeatability
 
     # If we are using a combined colour, we still need to choose which of the original colours we want to use.
     # We do this by choosing from a chequered grid:
