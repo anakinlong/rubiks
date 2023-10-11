@@ -242,8 +242,8 @@ class RecolourClosestCombinedTest(unittest.TestCase):
 
     def test_regular_weights(self) -> None:
         """
-        Test that applying the RecolourClosestCombined transformation on an image returns the correct result when using palette
-        weights.
+        Test that applying the RecolourClosestCombined transformation on an image returns the correct result when using
+        palette weights.
         """
         weights = PaletteWeights({"white": 150, "black": 1})
         equivalent_image = np.array(
@@ -260,8 +260,8 @@ class RecolourClosestCombinedTest(unittest.TestCase):
 
     def test_regular_no_weights(self) -> None:
         """
-        Test that applying the RecolourClosestCombined transformation on an image returns the correct result when not using
-        palette weights.
+        Test that applying the RecolourClosestCombined transformation on an image returns the correct result when not
+        using palette weights.
         """
         image = np.array(
             [

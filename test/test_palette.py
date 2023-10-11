@@ -1,7 +1,7 @@
 import unittest
 
 from rubiks.colour_class import Colour
-from rubiks.palette_class import Palette, CombinedPalette, PaletteWeights, DEFAULT_COLOUR_DICT
+from rubiks.palette_class import Palette, PaletteWeights, CombinedPalette, CombinedPaletteWeights, DEFAULT_COLOUR_DICT
 from rubiks.constants import RUBIKS_PALETTE
 
 
@@ -87,6 +87,12 @@ class PaletteTest(unittest.TestCase):
             }
         )
         self.assertEqual(self.rubiks_palette, equivalent_palette)
+
+
+class CombinedPaletteTest(unittest.TestCase):
+    """
+    Test the CombinedPalette class.
+    """
 
     def test_combine_colour_dict(self) -> None:
         """
@@ -220,3 +226,43 @@ class PaletteWeightsTest(unittest.TestCase):
         )
         with self.assertRaises(ValueError):
             weights.validate_against_palette(RUBIKS_PALETTE)
+
+
+class CombinedPaletteWeightsTest(unittest.TestCase):
+    """
+    Test the CombinedPaletteWeights class.
+    """
+
+    def setUp(self) -> None:
+        self.weights_dict = {"white": 1, "black": 2}
+
+    def test_combine_weights_dict(self) -> None:
+        """
+        Test that the __combine_weights_dict method produces the expected result.
+        """
+        equivalent_weights_dict = {
+            ("white", "black"): 1.5,
+        }
+        self.assertEqual(
+            CombinedPaletteWeights._CombinedPaletteWeights__combine_weights_dict(self.weights_dict),
+            equivalent_weights_dict,
+        )
+
+    def test_combine_colour_dict_duplicate_keys(self) -> None:
+        """
+        Test that the __combine_colour_dict method produces the expected result.
+        """
+        with self.assertRaises(ValueError):
+            weird_colour_dict = {
+                "a": 1,
+                "b": 2,
+                ("a", "b"): 1.5,
+            }
+            CombinedPaletteWeights._CombinedPaletteWeights__combine_weights_dict(weird_colour_dict)
+
+    def test_create_combined_weights(self) -> None:
+        """
+        Test that the CombinedPalette class produces the expected result.
+        """
+        equivalent_weights = PaletteWeights({("white", "black"): 1.5})
+        self.assertEqual(CombinedPaletteWeights(PaletteWeights(self.weights_dict)), equivalent_weights)
