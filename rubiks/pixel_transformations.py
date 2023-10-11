@@ -87,6 +87,10 @@ def recolour_closest_combined(
     :param pixel: a pixel.
     :param palette: a palette of colours from which the final image will be constructed. All colours must have the
     same channel format as a cv2.Mat.
+    :param palette_weights: a map from colour names to "weights", which will determine how big of a sphere of
+    influence each colour has.
+    :param combined_palette: the corresponding combined palette.
+    :param combined_palette_weights: the corresponding combined palette weights.
 
     :return: the transformed pixel.
     """
