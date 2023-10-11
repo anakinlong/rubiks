@@ -255,7 +255,7 @@ class RecolourClosestCombinedTest(unittest.TestCase):
             dtype=np.uint8,
         )
         np.testing.assert_array_equal(
-            RecolourClosestCombined.transform_image(self.image, self.palette, weights), equivalent_image
+            RecolourClosestCombined.transform_image(self.image, self.palette, weights, 1), equivalent_image
         )
 
     def test_regular_no_weights(self) -> None:
