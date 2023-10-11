@@ -313,3 +313,60 @@ class PaletteWeights(dict):
         # Check that all the values of the weights dict are floats or ints:
         for v in weights_dict.values():
             check_type(v, [float, int], "a value in weights_dict")
+
+
+class CombinedPaletteWeights:
+    """
+    Palette weights for a combined palette - where each colour is a combination of two colours from a different palette.
+    Each weight is the average of the weights of the pair of colours.
+    """
+
+    def __new__(cls, palette_weights: PaletteWeights) -> Palette:
+        """
+        Create a new combined palette weights. Returns an instance of PaletteWeights.
+
+        :param palette_weights: the palette weights of the original colours.
+
+        :return: new palette weights for colours resulting from combinations of two colours from the original palette.
+        """
+        # Combine the colour dict:
+        combined_weights_dict = CombinedPaletteWeights.__combine_weights_dict(palette_weights.weights_dict)
+
+        return PaletteWeights(combined_weights_dict)
+
+    @staticmethod
+    def __combine_weights_dict(weights_dict: dict[Any, float]) -> dict[list[Any], float]:
+        """
+        Create a "combined" colour dict, where combinations of colours from the colour dict are also included.
+
+        :param colour_dict: a dictionary mapping colour names to colours.
+
+        :return: a colour dictionary with combinations of the colours in the input colour dictionary.
+        """
+        combined_weights_dict = {}
+        # Get the colour names:
+        names = list(weights_dict.keys())
+        number_of_names = len(names)
+
+        # Loop through the combinations without repeating:
+        for i in range(number_of_names):
+            for j in range(i + 1, number_of_names):
+                # Get the two names:
+                name_1, name_2 = names[i], names[j]
+                # Combine the names:
+                new_name = (name_1, name_2)
+                # average the weights of the colours:
+                new_weight = (weights_dict[name_1] + weights_dict[name_2]) / 2
+                # Put them in the combined colour dictionary:
+                combined_weights_dict[new_name] = new_weight
+
+        # Check that these two dictionaries do not share any keys:
+        if any(key in weights_dict for key in combined_weights_dict) or any(
+            key in combined_weights_dict for key in weights_dict
+        ):
+            raise ValueError(
+                "Weights dict contains names such that combinations of them already exist in the names:\n"
+                f"{weights_dict.keys()}"
+            )
+
+        return combined_weights_dict
