@@ -48,4 +48,4 @@ rubiks_image = rubiks.RecolourClosestCombined.transform_image(
 cv2.imshow(image_name, rubiks.resize_image(rubiks_image, scale=scale))
 cv2.waitKey(0)
 
-# cv2.imwrite("Rubiks Images\fisheatcat rubiks.png", rubiks_image)
+# cv2.imwrite("Rubiks Images\\fisheatcat rubiks.png", rubiks_image)
